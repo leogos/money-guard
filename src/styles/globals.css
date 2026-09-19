@@ -1,0 +1,12 @@
+@import './reset.css';
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+#root {
+    min-height: 100vh;
+}
