@@ -1,0 +1,214 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.title {
+    width: 135px;
+    height: 45px;
+
+    margin: 0 0 0 15px;
+
+    display: flex;
+    align-items: center;
+
+    color: #fbfbfb;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    line-height: 100%;
+    font-weight: 400;
+
+    white-space: nowrap;
+}
+
+.filters {
+    position: absolute;
+
+    top: 65px;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 33px;
+
+    width: 395px;
+    height: 50px;
+
+    z-index: 20;
+}
+
+/* DROPDOWN */
+
+.dropdown {
+    position: relative;
+
+    width: 181px;
+    height: 50px;
+}
+
+.dropdownButton {
+    width: 100%;
+    height: 50px;
+
+    box-sizing: border-box;
+
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+
+    background-color: rgba(74, 86, 226, 0.1);
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.dropdownButton:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* OK */
+
+.arrow {
+    width: 9px;
+    height: 9px;
+
+    border-right: 1.5px solid #ffffff;
+    border-bottom: 1.5px solid #ffffff;
+
+    transform: rotate(45deg);
+
+    transition: transform 200ms ease;
+}
+
+.dropdownOpen .arrow {
+    transform: rotate(225deg);
+}
+
+/* AÇILAN LİSTE */
+
+.dropdownList {
+    position: absolute;
+
+    top: 50px;
+    left: 0;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    background-color: #302044;
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-top: none;
+
+    overflow: hidden;
+
+    z-index: 30;
+}
+
+/* SEÇENEK */
+
+.option {
+    width: 100%;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 2px 20px;
+
+    box-sizing: border-box;
+
+    border: none;
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.option:hover {
+    color: #ff868d;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* TABLET */
+
+@media screen and (max-width: 1100px) {
+    .filters {
+        gap: 18px;
+        width: auto;
+    }
+
+    .dropdown {
+        width: 170px;
+    }
+}
+
+/* MOBILE */
+
+@media screen and (max-width: 767px) {
+    .title {
+        width: auto;
+        height: 40px;
+
+        margin-left: 0;
+
+        font-size: 24px;
+    }
+
+    .filters {
+        position: static;
+
+        width: 100%;
+        height: auto;
+
+        margin-top: 20px;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 12px;
+    }
+
+    .dropdown {
+        flex: 1 1 calc(50% - 6px);
+
+        width: auto;
+        min-width: 0;
+
+        height: 46px;
+    }
+
+    .dropdownButton {
+        height: 46px;
+
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
