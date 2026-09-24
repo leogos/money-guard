@@ -1,0 +1,68 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal {
+  position: relative;
+  width: 540px;
+  background-color: rgba(47, 27, 84, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.title {
+  color: #fbfbfb;
+  font-size: 30px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: #fbfbfb;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.closeBtn:hover {
+  transform: scale(1.1);
+  color: #ff6596;
+}
+
+@media screen and (max-width: 767px) {
+  .modal {
+    width: 100%;
+    min-height: 100vh;
+    border-radius: 0;
+    padding: 20px;
+    justify-content: flex-start;
+  }
+}
