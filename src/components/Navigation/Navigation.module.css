@@ -1,0 +1,22 @@
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.link {
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.link:hover {
+    color: #2563eb;
+}
+
+.active {
+    color: #2563eb;
+}

@@ -8,3 +8,8 @@ export const selectBalance = state => {
     return transaction.type === 'income' ? total + amount : total - amount;
   }, 0);
 };
+
+export const selectTransactionsLoading = state =>
+  state.transactions.isLoading;
+
+export const selectTransactionsError = state => state.transactions.error;

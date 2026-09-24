@@ -1,0 +1,182 @@
+.wrapper {
+    width: 395px;
+    max-width: 395px;
+
+    padding: 0;
+
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+
+    box-sizing: border-box;
+}
+
+.header {
+    width: 100%;
+    min-height: 36px;
+
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 5px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.list {
+    width: 100%;
+}
+
+.item {
+    width: 100%;
+    min-height: 57px;
+
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.category {
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+
+    min-width: 0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+.dot {
+    width: 26px;
+    height: 26px;
+
+    flex: 0 0 26px;
+
+    border-radius: 3px;
+}
+
+.amount {
+    color: #ffffff;
+
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 400;
+
+    white-space: nowrap;
+}
+
+.summary {
+    width: 100%;
+
+    margin-top: 13px;
+
+    padding: 0 18px;
+
+    box-sizing: border-box;
+}
+
+.summaryRow {
+    min-height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.expensesAmount {
+    color: #ff868d;
+}
+
+.incomeAmount {
+    color: #fed057;
+}
+
+/* TABLET */
+
+@media screen and (max-width: 1100px) {
+    .wrapper {
+        width: 100%;
+        max-width: 395px;
+    }
+
+    .item {
+        min-height: 54px;
+    }
+}
+
+/* MOBILE */
+
+@media screen and (max-width: 767px) {
+    .wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .header {
+        padding: 0 12px;
+
+        font-size: 13px;
+    }
+
+    .item {
+        min-height: 52px;
+
+        padding: 0 12px;
+    }
+
+    .category {
+        gap: 12px;
+
+        font-size: 13px;
+    }
+
+    .dot {
+        width: 22px;
+        height: 22px;
+
+        flex-basis: 22px;
+    }
+
+    .amount {
+        font-size: 13px;
+    }
+
+    .summary {
+        padding: 0 12px;
+    }
+
+    .summaryRow {
+        min-height: 40px;
+
+        font-size: 13px;
+    }
+}
