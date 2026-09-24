@@ -1,0 +1,182 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 24px 20px;
+  background:
+    radial-gradient(ellipse 75% 70% at 20% 45%,
+      #72298f 0%,
+      rgba(99, 40, 139, 0.8) 30%,
+      rgba(54, 28, 79, 0.35) 55%,
+      transparent 75%),
+    radial-gradient(ellipse 75% 70% at 80% 60%,
+      #4936a1 0%,
+      rgba(63, 45, 135, 0.8) 32%,
+      rgba(39, 24, 68, 0.35) 58%,
+      transparent 78%),
+    radial-gradient(ellipse 55% 45% at 50% 105%,
+      #762b91 0%,
+      rgba(105, 40, 135, 0.7) 40%,
+      transparent 75%),
+    linear-gradient(115deg,
+      #100919 0%,
+      #1d0e2c 35%,
+      #2b1a50 65%,
+      #10091a 100%);
+}
+
+.leftCoins,
+.rightCoins {
+  display: none;
+}
+
+.card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 480px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 8px;
+  object-fit: contain;
+}
+
+.title {
+  margin: 0 0 48px;
+  color: #fbfbfb;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .page {
+    padding: 40px 32px;
+    background:
+      radial-gradient(ellipse 55% 65% at 18% 45%,
+        #70288f 0%,
+        rgba(99, 40, 139, 0.78) 30%,
+        rgba(52, 25, 75, 0.3) 58%,
+        transparent 75%),
+      radial-gradient(ellipse 60% 70% at 82% 60%,
+        #4936a1 0%,
+        rgba(62, 44, 134, 0.8) 32%,
+        rgba(39, 24, 68, 0.35) 58%,
+        transparent 78%),
+      radial-gradient(ellipse 55% 45% at 50% 105%,
+        #762b93 0%,
+        rgba(106, 40, 137, 0.7) 40%,
+        transparent 76%),
+      linear-gradient(115deg,
+        #100919 0%,
+        #21102f 38%,
+        #2c1c53 68%,
+        #0e0817 100%);
+  }
+
+  .leftCoins,
+  .rightCoins {
+    display: block;
+    position: absolute;
+    max-width: none;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    mix-blend-mode: multiply;
+  }
+
+  .leftCoins {
+    width: 374px;
+    height: 720px;
+    top: -204px;
+    left: -58px;
+  }
+
+  .rightCoins {
+    width: 526px;
+    height: 720px;
+    top: 391px;
+    left: 474px;
+  }
+
+  .card {
+    z-index: 2;
+    max-width: 480px;
+    padding: 48px 56px;
+    border-radius: 12px;
+    background:
+      radial-gradient(ellipse 90% 100% at 50% 100%,
+        rgba(91, 61, 181, 0.72) 0%,
+        rgba(61, 41, 116, 0.62) 45%,
+        rgba(42, 31, 67, 0.86) 100%);
+    box-shadow:
+      0 8px 30px rgba(0, 0, 0, 0.35),
+      0 15px 45px rgba(20, 5, 35, 0.2);
+  }
+
+  .logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .title {
+    margin-bottom: 40px;
+    font-size: 27px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .page {
+    padding: 48px 32px;
+  }
+
+  .leftCoins,
+  .rightCoins {
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 720px;
+    max-width: none;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    mix-blend-mode: multiply;
+  }
+
+  .leftCoins {
+    width: 374px;
+    height: 720px;
+    top: 0;
+    left: 0;
+  }
+
+  .rightCoins {
+    width: 526px;
+    height: 720px;
+    top: 0;
+    right: 0;
+    left: auto;
+  }
+
+  .card {
+    max-width: 480px;
+    padding: 48px 56px;
+  }
+}
