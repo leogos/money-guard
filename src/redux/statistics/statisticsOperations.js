@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { getStatistics } from '../../services/statisticsApi';
 
 export const fetchStatistics = createAsyncThunk(

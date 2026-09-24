@@ -1,0 +1,169 @@
+.wrapper {
+    width: 480px;
+    max-width: 100%;
+    min-height: 380px;
+    box-sizing: border-box;
+
+    padding: 0;
+
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(74, 86, 226, 0.18) 0%,
+            rgba(74, 86, 226, 0.08) 48%,
+            rgba(57, 20, 91, 0.2) 100%
+        );
+
+    position: relative;
+    isolation: isolate;
+}
+
+.wrapper::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    background:
+        radial-gradient(
+            circle at 72% 88%,
+            rgba(116, 22, 115, 0.72) 0%,
+            rgba(116, 22, 115, 0.35) 24%,
+            rgba(116, 22, 115, 0) 52%
+        ),
+        linear-gradient(
+            135deg,
+            #10101b 0%,
+            #11101e 36%,
+            #1b122c 62%,
+            #36133f 100%
+        );
+}
+
+.currencyTable {
+    width: 480px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.currencyHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+
+    width: 100%;
+    height: 56px;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.20);
+
+    color: #fbfbfb;
+    font-size: 16px;
+    line-height: 100%;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+.currencyRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+
+    width: 100%;
+    height: 36px;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    color: #fbfbfb;
+    font-size: 14px;
+    line-height: 100%;
+    font-weight: 400;
+
+    text-align: center;
+}
+
+.currencyRow:last-child {
+    border-bottom: none;
+}
+
+.currencyMessage {
+    width: 100%;
+    min-height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+.updated {
+    margin: 8px 0 0;
+
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 9px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+    .wrapper {
+        width: 100%;
+        max-width: 480px;
+        min-height: auto;
+    }
+
+    .currencyHeader {
+        height: 50px;
+        font-size: 14px;
+    }
+
+    .currencyRow {
+        height: 36px;
+        font-size: 12px;
+    }
+
+    .updated {
+        font-size: 8px;
+    }
+}
+
+.chart {
+    width: 480px;
+    max-width: 100%;
+    height: 167px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.chartSvg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.chartLabel {
+    fill: #ff868d;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+@media screen and (max-width: 767px) {
+    .chart {
+        width: 100%;
+        height: 140px;
+    }
+
+    .chartLabel {
+        font-size: 9px;
+    }
+}

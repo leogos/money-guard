@@ -1,3 +1,4 @@
+import styles from './StatisticsDashboard.module.css';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchStatistics } from '../../redux/statistics/statisticsOperations';
@@ -17,47 +18,72 @@ const months = [
     { value: 12, label: 'December' },
 ];
 
-const years = [2024, 2025, 2026];
+const years = [
+    2026,
+    2025,
+    2024,
+    2023,
+    2022,
+    2021,
+    2020,
+];
 
 const StatisticsDashboard = () => {
     const dispatch = useDispatch();
 
-    const [month, setMonth] = useState(new Date().getMonth() + 1);
-    const [year, setYear] = useState(new Date().getFullYear());
+    const [month, setMonth] = useState(3);
+    const [year, setYear] = useState(2023);
 
     useEffect(() => {
-        dispatch(fetchStatistics({ month, year }));
+        dispatch(
+            fetchStatistics({
+                month,
+                year,
+            })
+        );
     }, [dispatch, month, year]);
 
     return (
-        <div>
-            <label>
-                Month
+        <div className={styles.wrapper}>
+            <h1 className={styles.title}>
+                Statistics
+            </h1>
+
+            <div className={styles.filters}>
                 <select
+                    className={styles.select}
                     value={month}
-                    onChange={event => setMonth(Number(event.target.value))}
+                    onChange={event =>
+                        setMonth(Number(event.target.value))
+                    }
                 >
                     {months.map(item => (
-                        <option key={item.value} value={item.value}>
+                        <option
+                            key={item.value}
+                            value={item.value}
+                        >
                             {item.label}
                         </option>
                     ))}
                 </select>
-            </label>
 
-            <label>
-                Year
                 <select
+                    className={styles.select}
                     value={year}
-                    onChange={event => setYear(Number(event.target.value))}
+                    onChange={event =>
+                        setYear(Number(event.target.value))
+                    }
                 >
                     {years.map(item => (
-                        <option key={item} value={item}>
+                        <option
+                            key={item}
+                            value={item}
+                        >
                             {item}
                         </option>
                     ))}
                 </select>
-            </label>
+            </div>
         </div>
     );
 };
