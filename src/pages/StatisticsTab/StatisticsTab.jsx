@@ -3,6 +3,7 @@ import StatisticsTable from '../../components/StatisticsTable/StatisticsTable';
 import Chart from '../../components/Chart/Chart';
 import styles from './StatisticsTab.module.css';
 import { useSelector } from 'react-redux';
+
 import {
     selectStatistics,
     selectStatisticsError,

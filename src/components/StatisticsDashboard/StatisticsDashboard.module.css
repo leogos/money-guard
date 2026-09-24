@@ -39,13 +39,26 @@
     z-index: 20;
 }
 
-.select {
+/* DROPDOWN */
+
+.dropdown {
+    position: relative;
+
     width: 181px;
+    height: 50px;
+}
+
+.dropdownButton {
+    width: 100%;
     height: 50px;
 
     box-sizing: border-box;
 
-    padding: 0 42px 0 20px;
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     color: #ffffff;
 
@@ -60,24 +73,89 @@
 
     outline: none;
 
-    appearance: none;
+    cursor: pointer;
+}
 
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+.dropdownButton:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+}
 
-    background-repeat: no-repeat;
-    background-position: right 20px center;
+/* OK */
+
+.arrow {
+    width: 9px;
+    height: 9px;
+
+    border-right: 1.5px solid #ffffff;
+    border-bottom: 1.5px solid #ffffff;
+
+    transform: rotate(45deg);
+
+    transition: transform 200ms ease;
+}
+
+.dropdownOpen .arrow {
+    transform: rotate(225deg);
+}
+
+/* AÇILAN LİSTE */
+
+.dropdownList {
+    position: absolute;
+
+    top: 50px;
+    left: 0;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    background-color: #302044;
+
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-top: none;
+
+    overflow: hidden;
+
+    z-index: 30;
+}
+
+/* SEÇENEK */
+
+.option {
+    width: 100%;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 2px 20px;
+
+    box-sizing: border-box;
+
+    border: none;
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+
+    text-align: left;
 
     cursor: pointer;
 }
 
-.select:focus {
-    border-color: rgba(255, 255, 255, 0.8);
+.option:hover {
+    color: #ff868d;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.select option {
-    color: #ffffff;
-    background-color: #302044;
-}
 
 /* TABLET */
 
@@ -87,7 +165,7 @@
         width: auto;
     }
 
-    .select {
+    .dropdown {
         width: 170px;
     }
 }
@@ -118,15 +196,19 @@
         gap: 12px;
     }
 
-    .select {
+    .dropdown {
         flex: 1 1 calc(50% - 6px);
 
         width: auto;
         min-width: 0;
 
         height: 46px;
+    }
+
+    .dropdownButton {
+        height: 46px;
 
         padding-left: 14px;
-        padding-right: 35px;
+        padding-right: 14px;
     }
 }

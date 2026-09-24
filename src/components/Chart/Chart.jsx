@@ -1,12 +1,14 @@
 import styles from './Chart.module.css';
 import { useSelector } from 'react-redux';
 import { Doughnut } from 'react-chartjs-2';
+
 import {
     Chart as ChartJS,
     ArcElement,
     Tooltip,
     Legend,
 } from 'chart.js';
+
 import { selectStatistics } from '../../redux/statistics/statisticsSelectors';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -33,7 +35,8 @@ const Chart = () => {
     );
 
     const totalExpenses = expenseCategories.reduce(
-        (sum, category) => sum + Number(category.total || 0),
+        (sum, category) =>
+            sum + Number(category.total || 0),
         0
     );
 
@@ -41,30 +44,34 @@ const Chart = () => {
         category => Number(category.total || 0) > 0
     );
 
+    const categoryColors = expenseCategories.map(
+        (_, index) =>
+            CATEGORY_COLORS[
+            index % CATEGORY_COLORS.length
+            ]
+    );
+
     const data = {
         labels: hasTransactions
-            ? expenseCategories.map(category => category.name)
+            ? expenseCategories.map(
+                category => category.name
+            )
             : ['Expenses'],
 
         datasets: [
             {
                 data: hasTransactions
-                    ? expenseCategories.map(category =>
-                        Number(category.total || 0)
+                    ? expenseCategories.map(
+                        category =>
+                            Number(category.total || 0)
                     )
                     : [1],
 
                 backgroundColor: hasTransactions
-                    ? expenseCategories.map(
-                        (_, index) =>
-                            CATEGORY_COLORS[
-                            index % CATEGORY_COLORS.length
-                            ]
-                    )
+                    ? categoryColors
                     : ['rgba(255, 255, 255, 0.08)'],
 
                 borderWidth: 0,
-
                 hoverOffset: 0,
             },
         ],
@@ -87,6 +94,16 @@ const Chart = () => {
 
             tooltip: {
                 enabled: hasTransactions,
+
+                callbacks: {
+                    label: context => {
+                        const value = Number(
+                            context.raw || 0
+                        );
+
+                        return ` ${value.toFixed(2)}`;
+                    },
+                },
             },
         },
     };

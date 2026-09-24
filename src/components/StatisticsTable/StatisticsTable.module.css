@@ -112,11 +112,11 @@
     font-weight: 600;
 }
 
-.summaryRow:first-child .amount {
+.expensesAmount {
     color: #ff868d;
 }
 
-.summaryRow:last-child .amount {
+.incomeAmount {
     color: #fed057;
 }
 

@@ -1,5 +1,5 @@
 import styles from './StatisticsDashboard.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchStatistics } from '../../redux/statistics/statisticsOperations';
 
@@ -28,6 +28,92 @@ const years = [
     2020,
 ];
 
+const Dropdown = ({ value, options, onChange }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = event => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener(
+                'mousedown',
+                handleClickOutside
+            );
+        };
+    }, []);
+
+    const selectedOption = options.find(
+        option =>
+            typeof option === 'object'
+                ? option.value === value
+                : option === value
+    );
+
+    const selectedLabel =
+        typeof selectedOption === 'object'
+            ? selectedOption.label
+            : selectedOption;
+
+    return (
+        <div
+            ref={dropdownRef}
+            className={`${styles.dropdown} ${isOpen ? styles.dropdownOpen : ''
+                }`}
+        >
+            <button
+                type="button"
+                className={styles.dropdownButton}
+                onClick={() => setIsOpen(prev => !prev)}
+            >
+                <span>{selectedLabel}</span>
+
+                <span className={styles.arrow} />
+            </button>
+
+            {isOpen && (
+                <ul className={styles.dropdownList}>
+                    {options.map(option => {
+                        const optionValue =
+                            typeof option === 'object'
+                                ? option.value
+                                : option;
+
+                        const optionLabel =
+                            typeof option === 'object'
+                                ? option.label
+                                : option;
+
+                        return (
+                            <li key={optionValue}>
+                                <button
+                                    type="button"
+                                    className={styles.option}
+                                    onClick={() => {
+                                        onChange(optionValue);
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    {optionLabel}
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+        </div>
+    );
+};
+
 const StatisticsDashboard = () => {
     const dispatch = useDispatch();
 
@@ -45,44 +131,20 @@ const StatisticsDashboard = () => {
 
     return (
         <div className={styles.wrapper}>
-            <h1 className={styles.title}>
-                Statistics
-            </h1>
+            <h1 className={styles.title}>Statistics</h1>
 
             <div className={styles.filters}>
-                <select
-                    className={styles.select}
+                <Dropdown
                     value={month}
-                    onChange={event =>
-                        setMonth(Number(event.target.value))
-                    }
-                >
-                    {months.map(item => (
-                        <option
-                            key={item.value}
-                            value={item.value}
-                        >
-                            {item.label}
-                        </option>
-                    ))}
-                </select>
+                    options={months}
+                    onChange={setMonth}
+                />
 
-                <select
-                    className={styles.select}
+                <Dropdown
                     value={year}
-                    onChange={event =>
-                        setYear(Number(event.target.value))
-                    }
-                >
-                    {years.map(item => (
-                        <option
-                            key={item}
-                            value={item}
-                        >
-                            {item}
-                        </option>
-                    ))}
-                </select>
+                    options={years}
+                    onChange={setYear}
+                />
             </div>
         </div>
     );

@@ -1,4 +1,3 @@
-
 import styles from './StatisticsTable.module.css';
 import { useSelector } from 'react-redux';
 
@@ -26,7 +25,8 @@ const StatisticsTable = () => {
     );
 
     const totalExpenses = expenseCategories.reduce(
-        (sum, category) => sum + Number(category.total || 0),
+        (sum, category) =>
+            sum + Number(category.total || 0),
         0
     );
 
@@ -38,40 +38,49 @@ const StatisticsTable = () => {
             </div>
 
             <div className={styles.list}>
-                {expenseCategories.map((category, index) => (
-                    <div
-                        className={styles.item}
-                        key={category.name}
-                    >
-                        <div className={styles.category}>
+                {expenseCategories.map((category, index) => {
+                    const categoryColor =
+                        CATEGORY_COLORS[
+                        index % CATEGORY_COLORS.length
+                        ];
+
+                    return (
+                        <div
+                            className={styles.item}
+                            key={category.name}
+                        >
+                            <div className={styles.category}>
+                                <span
+                                    className={styles.dot}
+                                    style={{
+                                        backgroundColor:
+                                            categoryColor,
+                                    }}
+                                />
+
+                                <span>{category.name}</span>
+                            </div>
+
                             <span
-                                className={styles.dot}
+                                className={styles.amount}
                                 style={{
-                                    backgroundColor:
-                                        CATEGORY_COLORS[
-                                        index %
-                                        CATEGORY_COLORS.length
-                                        ],
+                                    color: categoryColor,
                                 }}
-                            />
-
-                            <span>{category.name}</span>
+                            >
+                                {Number(
+                                    category.total || 0
+                                ).toFixed(2)}
+                            </span>
                         </div>
-
-                        <span className={styles.amount}>
-                            {Number(
-                                category.total || 0
-                            ).toFixed(2)}
-                        </span>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             <div className={styles.summary}>
                 <div className={styles.summaryRow}>
                     <span>Expenses</span>
 
-                    <span>
+                    <span className={styles.expensesAmount}>
                         {totalExpenses.toFixed(2)}
                     </span>
                 </div>
@@ -79,7 +88,7 @@ const StatisticsTable = () => {
                 <div className={styles.summaryRow}>
                     <span>Income</span>
 
-                    <span>
+                    <span className={styles.incomeAmount}>
                         {Number(
                             statistics?.incomeSummary || 0
                         ).toFixed(2)}
