@@ -39,7 +39,6 @@ const authSlice = createSlice({
 
   extraReducers: builder => {
     builder
-      // REGISTER
       .addCase(register.pending, state => {
         state.isLoading = true;
         state.error = null;
@@ -58,7 +57,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // LOGIN
+      
       .addCase(login.pending, state => {
         state.isLoading = true;
         state.error = null;
@@ -77,7 +76,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // CURRENT USER
+      
       .addCase(getCurrentUser.pending, state => {
         state.isRefreshing = true;
         state.error = null;
@@ -111,7 +110,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(logout.rejected, state => {
-        // Backend cevap vermese bile client oturumunu kapat.
+        
         state.user = {
           username: null,
           email: null,

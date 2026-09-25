@@ -26,7 +26,6 @@ export const DeleteTransactionModal = ({ transactionId, onClose }) => {
       </p>
 
       <div className={styles.buttonContainer}>
-        {/* Projendeki Delete butonu tasarımı gradient ise deleteBtn kullanıyoruz */}
         <button
           type="button"
           onClick={handleDelete}

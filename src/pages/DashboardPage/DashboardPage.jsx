@@ -18,7 +18,6 @@ const DashboardPage = () => {
           isCurrencyPage ? styles.currencyPage : ''
         }`}
       >
-        {/* SOL PANEL (Sidebar) */}
         <aside className={styles.sidebar}>
           <div className={styles.sidebarTop}>
             <Navigation />
@@ -33,7 +32,6 @@ const DashboardPage = () => {
           </div>
         </aside>
 
-        {/* SAĞ PANEL (Dinamik Sayfalar) */}
         <main className={styles.contentArea}>
           <Outlet />
         </main>

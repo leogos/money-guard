@@ -13,10 +13,7 @@ const setAuthHeader = token => {
   }
 };
 
-// Token'ı güvenli bir şekilde arayan yardımcı fonksiyon
 const getTokenSafely = state => {
-  // Projendeki reducer ismine göre auth, session veya user içinde arar.
-  // Çökmeyi engellemek için soru işareti (?.) (Optional Chaining) kullanıyoruz.
   return state.auth?.token || state.session?.token || state.user?.token;
 };
 
@@ -97,4 +94,3 @@ export const getTransactions = createAsyncThunk(
     }
   }
 );
-

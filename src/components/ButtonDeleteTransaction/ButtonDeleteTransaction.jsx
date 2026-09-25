@@ -26,7 +26,6 @@ export const ButtonDeleteTransaction = ({ transactionId }) => {
         Delete
       </button>
 
-      {/* Onay Kutusu */}
       {showConfirm && (
         <div
           style={{
