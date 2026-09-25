@@ -5,9 +5,14 @@
     radial-gradient(600px 300px at 50% 6%,
       rgba(155, 89, 255, 0.16),
       rgba(155, 89, 255, 0) 30%),
-    linear-gradient(180deg, #7a3fc5 0%, #5b2fb5 30%, #3a1c62 65%, #1f0930 100%),
-    linear-gradient(120deg, rgba(255, 165, 0, 0.1), rgba(255, 165, 0, 0) 30%);
-
+    linear-gradient(180deg,
+      #7a3fc5 0%,
+      #5b2fb5 30%,
+      #3a1c62 65%,
+      #1f0930 100%),
+    linear-gradient(120deg,
+      rgba(255, 165, 0, 0.1),
+      rgba(255, 165, 0, 0) 30%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,7 +154,6 @@
   line-height: 50px;
 }
 
-
 @media (min-width: 768px) {
   .registerFormContainer {
     background-image:
@@ -158,7 +162,6 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    object-fit: cover;
   }
 
   .registerForm {
@@ -192,14 +195,20 @@
   }
 }
 
-
 @media (min-width: 1280px) {
   .registerFormContainer {
-    background-image:
-      url("../../img/register-background-dektop.png"),
+    position: relative;
+    isolation: isolate;
+    background:
       linear-gradient(180deg, #7a3fc5 0%, #1f0930 100%);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  }
+
+  .registerFormContainer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../../img/register-background-dektop.webp") center / cover no-repeat;
+    opacity: 0.45;
+    z-index: -1;
   }
 }
