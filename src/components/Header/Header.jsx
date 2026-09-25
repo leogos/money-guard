@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { selectUser } from '../../redux/auth/selectors';
-import LogoutModal from '../LogoutModal/LogOutModal';
+import LogoutModal from '../LogOutModal/LogOutModal';
 import { IoIosLogOut } from 'react-icons/io';
 import styles from './Header.module.css';
 
