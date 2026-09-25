@@ -1,230 +1,154 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import * as Yup from 'yup';
+// Kisi 1 - RegistrationForm
+// Kullanilacak Redux operation: registerUser from redux/auth/operations.
+// Kullanilacak Redux selector: selectAuthError gerekirse redux/auth/selectors.
+// Form: react-hook-form + Yup; alanlar name, email, password, confirmPassword.
 
-import { register } from '../../redux/auth/authOperations';
-import { selectIsLoading } from '../../redux/auth/authSelectors';
-import ProgressBar from '../ProgressBar/ProgressBar';
+// ek olarak indirdiğim kütüphaneler: react-hook-form, yup, @hookform/resolvers
 
-import styles from './RegistrationForm.module.css';
+import { registerUser } from "../../redux/auth/operations";
+import { useDispatch } from "react-redux";
+import { useForm, useWatch } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "react-router-dom";
+import { FaUser, FaRegEnvelope, FaLock } from "react-icons/fa";
+import css from "./RegistrationForm.module.css";
 
-const validationSchema = Yup.object({
-  name: Yup.string().trim().required('Name is required'),
-  email: Yup.string()
-    .email('Please enter a valid email address')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(6, 'Password must contain at least 6 characters')
-    .max(12, 'Password must contain no more than 12 characters')
-    .required('Password is required'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required('Confirm password is required'),
+// Form doğrulama kuralları
+const registrationSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Username is required")
+    .min(3, "The username must be at least 3 characters long."),
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Please enter a valid email address."),
+  password: yup
+    .string()
+    .required("Please enter a password.")
+    .min(6, "Your password must be at least 6 characters long.")
+    .max(12, "Your password can be a maximum of 12 characters."),
+  confirmPassword: yup
+    .string()
+    .required("Please confirm your password.")
+    .oneOf([yup.ref("password"), null], "The passwords don't match."),
 });
 
-const UserIcon = () => (
-  <svg
-    className={styles.icon}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="8" r="3" fill="currentColor" />
-    <path
-      d="M5 19C5 15.6863 8.13401 13 12 13C15.866 13 19 15.6863 19 19"
-      fill="currentColor"
-    />
-  </svg>
-);
-
-const EmailIcon = () => (
-  <svg
-    className={styles.icon}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path
-      d="M3 6.75C3 5.784 3.784 5 4.75 5H19.25C20.216 5 21 5.784 21 6.75V17.25C21 18.216 20.216 19 19.25 19H4.75C3.784 19 3 18.216 3 17.25V6.75Z"
-      stroke="currentColor"
-      strokeWidth="2"
-    />
-    <path
-      d="M4 7L12 13L20 7"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const PasswordIcon = () => (
-  <svg
-    className={styles.icon}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <rect
-      x="5"
-      y="10"
-      width="14"
-      height="10"
-      rx="2"
-      stroke="currentColor"
-      strokeWidth="2"
-    />
-    <path
-      d="M8 10V7.5C8 5.567 9.567 4 11.5 4H12.5C14.433 4 16 5.567 16 7.5V10"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-    <circle cx="12" cy="15" r="1.5" fill="currentColor" />
-  </svg>
-);
-
-const RegistrationForm = () => {
+export function RegistrationForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isLoading = useSelector(selectIsLoading);
 
   const {
-    register: registerField,
+    register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
-    mode: 'onTouched',
+    resolver: yupResolver(registrationSchema),
+    mode: "onTouched",
   });
 
-  const name = watch('name', '');
-  const email = watch('email', '');
-  const password = watch('password', '');
-  const confirmPassword = watch('confirmPassword', '');
-
-  const onSubmit = async ({ name, email, password }) => {
-    try {
-      await dispatch(
-        register({
-          username: name,
-          email,
-          password,
-        })
-      ).unwrap();
-
-      navigate('/dashboard');
-    } catch (error) {
-      toast.error(error || 'Registration failed');
+  // şifre doğrulama için bar kontrolü
+  const confirmPassword = useWatch({
+    control,
+    name: "confirmPassword",
+    defaultValue: "",
+  });
+  const password = useWatch({
+    control,
+    name: "password",
+    defaultValue: "",
+  });
+  const getProgressWidth = () => {
+    if (!confirmPassword) return "0%";
+    if (password === confirmPassword) return "100%";
+    if (password.startsWith(confirmPassword)) {
+      const percentage = (confirmPassword.length / password.length) * 100;
+      return `${percentage}%`;
     }
+    return "0%";
+  };
+  const onFormSubmit = ({ name, email, password }) => {
+    dispatch(registerUser({ username: name, email, password }));
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="register-name">
-          Name
-        </label>
-        <div className={styles.inputWrapper}>
-          <UserIcon />
-          <input
-            className={styles.input}
-            id="register-name"
-            type="text"
-            placeholder="Name"
-            autoComplete="name"
-            {...registerField('name')}
-          />
-        </div>
-        {errors.name && <p className={styles.error}>{errors.name.message}</p>}
-      </div>
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="register-email">
-          Email
-        </label>
-        <div className={styles.inputWrapper}>
-          <EmailIcon />
-          <input
-            className={styles.input}
-            id="register-email"
-            type="email"
-            placeholder="E-mail"
-            autoComplete="email"
-            {...registerField('email')}
-          />
-        </div>
-        {errors.email && <p className={styles.error}>{errors.email.message}</p>}
-      </div>
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="register-password">
-          Password
-        </label>
-        <div className={styles.inputWrapper}>
-          <PasswordIcon />
-          <input
-            className={styles.input}
-            id="register-password"
-            type="password"
-            placeholder="Password"
-            autoComplete="new-password"
-            {...registerField('password')}
-          />
-        </div>
-        {errors.password && (
-          <p className={styles.error}>{errors.password.message}</p>
-        )}
-      </div>
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="register-confirm-password">
-          Confirm password
-        </label>
-        <div className={styles.inputWrapper}>
-          <PasswordIcon />
-          <input
-            className={styles.input}
-            id="register-confirm-password"
-            type="password"
-            placeholder="Confirm password"
-            autoComplete="new-password"
-            {...registerField('confirmPassword')}
-          />
-        </div>
-        <ProgressBar
-          name={name}
-          email={email}
-          password={password}
-          confirmPassword={confirmPassword}
-        />
-        {errors.confirmPassword && (
-          <p className={styles.error}>{errors.confirmPassword.message}</p>
-        )}
-      </div>
-      <button
-        className={styles.submitButton}
-        type="submit"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Registering...' : 'REGISTER'}
-      </button>
-      <Link className={styles.loginButton} to="/login">
-        LOG IN
-      </Link>
-    </form>
-  );
-};
+    <div className={css.registerFormContainer}>
+      <form className={css.registerForm} onSubmit={handleSubmit(onFormSubmit)}>
 
-export default RegistrationForm;
+        <div className={css.logoContainer}>
+          <img src="/favicon.svg" alt="Money Guard Logo" className={css.logoImg} />
+          <h1 className={css.logoTitle}>Money Guard</h1>
+        </div>
+
+        <div className={css.inputContainer}>
+          <FaUser className={css.inputIcon} />
+          <input
+            className={css.inputField}
+            placeholder="Name"
+            type="text"
+            {...register("name")}
+          />
+          {errors.name && (
+            <p className={css.errorMessage}>{errors.name.message}</p>
+          )}
+        </div>
+
+        <div className={css.inputContainer}>
+          <FaRegEnvelope className={css.inputIcon} />
+          <input
+            className={css.inputField}
+            placeholder="Email"
+            type="email"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className={css.errorMessage}>{errors.email.message}</p>
+          )}
+        </div>
+
+        <div className={css.inputContainer}>
+          <FaLock className={css.inputIcon} />
+          <input
+            className={css.inputField}
+            placeholder="Password"
+            type="password"
+            {...register("password")}
+          />
+          {errors.password && (
+            <p className={css.errorMessage}>{errors.password.message}</p>
+          )}
+        </div>
+
+        <div className={css.inputContainer}>
+          <FaLock className={css.inputIcon} />
+          <input
+            className={css.inputField}
+            placeholder="Confirm Password"
+            type="password"
+            {...register("confirmPassword")}
+          />
+          {errors.confirmPassword && (
+            <p className={css.errorMessage}>{errors.confirmPassword.message}</p>
+          )}
+        </div>
+
+        <div className={css.passwordStrengthBar}>
+          <div
+            className={css.passwordStrengthFill}
+            style={{ width: getProgressWidth() }}
+          ></div>
+        </div>
+
+        <div className={css.buttonContainer}>
+          <button className={css.registerButton} type="submit">
+            REGISTER
+          </button>
+          <Link className={css.loginLink} to="/login">
+            LOG IN
+          </Link>
+        </div>
+      </form>
+    </div>
+  );
+}

@@ -1,188 +1,171 @@
+.page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 20px 32px;
+  background: linear-gradient(180deg, #3d2375 0%, #170c3a 60%, #11092c 100%);
+  color: #ffffff;
+}
+
+.card {
+  width: 100%;
+  max-width: 320px;
+  position: relative;
+}
+
+.logoArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 46px;
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+}
+
+.logoText {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
 .form {
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 
 .field {
-  position: relative;
-  width: 100%;
-  margin-bottom: 24px;
-}
-
-.label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.inputWrapper {
-  position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
-  height: 32px;
-  border-bottom: 1px solid #ffffff66;
+  gap: 18px;
+  min-height: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.field:focus-within {
+  border-bottom-color: #ffc727;
+  color: #ffc727;
+}
+
+.field + .field {
+  margin-top: 18px;
 }
 
 .icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin-right: 16px;
-  color: #ffffff66;
+  font-size: 16px;
+  color: currentColor;
 }
 
 .input {
   width: 100%;
-  height: 100%;
-  padding: 0;
+  min-width: 0;
   border: 0;
-  outline: none;
+  outline: 0;
   background: transparent;
-  color: #fbfbfb;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1;
+  color: #ffffff;
+  font: inherit;
+  font-size: 18px;
 }
 
 .input::placeholder {
-  color: #ffffff99;
-  opacity: 1;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.input:focus::placeholder {
-  color: transparent;
+.fieldError {
+  margin: 6px 0 0 42px;
+  color: #ff8b8b;
+  font-size: 12px;
+  line-height: 1.3;
 }
 
-.inputWrapper:focus-within {
-  border-bottom-color: #ffffff66;
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
 }
 
-.input:-webkit-autofill,
-.input:-webkit-autofill:hover,
-.input:-webkit-autofill:focus,
-.input:-webkit-autofill:active {
-  -webkit-text-fill-color: #fbfbfb;
-  -webkit-box-shadow: 0 0 0 1000px transparent inset;
-  box-shadow: 0 0 0 1000px transparent inset;
-  transition: background-color 9999s ease-in-out 0s;
-}
-
-.error {
-  margin: 5px 0 0;
-  color: #ffb4b4;
-  font-size: 11px;
+.submitButton,
+.secondaryLink {
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .submitButton {
-  width: 100%;
-  height: 48px;
-  margin-top: 7px;
-  padding: 0;
-  border: 0;
-  border-radius: 20px;
-  background:
-    linear-gradient(90deg,
-      #ffc044 0%,
-      #df8290 48%,
-      #b342b7 100%);
-  color: #fbfbfb;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 400;
+  color: #ffffff;
   cursor: pointer;
-  box-shadow:
-    0 8px 15px rgba(0, 0, 0, 0.18);
-  transition:
-    opacity 200ms ease,
-    transform 200ms ease;
-}
-
-.submitButton:hover {
-  opacity: 0.92;
-}
-
-.submitButton:active {
-  transform: scale(0.99);
+  background: linear-gradient(96deg, #ffc727 0%, #9e40ba 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
 .submitButton:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+  cursor: wait;
+  opacity: 0.72;
 }
 
-.registerButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 48px;
-  margin-top: 16px;
-  border-radius: 20px;
-  background: #fbfbfb;
-  color: #5b3b92;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 400;
-  text-decoration: none;
-  box-shadow:
-    0 8px 15px rgba(0, 0, 0, 0.08);
-  transition:
-    opacity 200ms ease,
-    transform 200ms ease;
+.secondaryLink {
+  color: #623f8b;
+  background: #fcfcfc;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
-.registerButton:hover {
-  opacity: 0.92;
-}
-
-.registerButton:active {
-  transform: scale(0.99);
-}
-
-@media screen and (min-width: 768px) {
-  .field {
-    margin-bottom: 24px;
+@media (min-width: 768px) {
+  .page {
+    align-items: center;
+    padding: 40px 20px;
+    background:
+      linear-gradient(rgba(34, 20, 72, 0.35), rgba(34, 20, 72, 0.35)),
+      url("../../img/bakcgroundLogin.png") center / cover no-repeat,
+      radial-gradient(circle at center, #2e1d65 0%, #11092c 100%);
   }
 
-  .inputWrapper {
-    height: 48px;
+  .card {
+    max-width: 533px;
+    min-height: 514px;
+    padding: 80px 62px 62px;
+    border-radius: 8px;
+    background: rgba(82, 59, 126, 0.65);
+    box-shadow: 0 4px 60px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(50px);
+  }
+
+  .logoArea {
+    margin-bottom: 36px;
+  }
+
+  .field {
+    width: 409px;
+  }
+
+  .actions {
+    align-items: center;
   }
 
   .submitButton,
-  .registerButton {
-
-    letter-spacing: 10%;
-  }
-
-  .input {
-    font-size: 18px;
-  }
-
-  .submitButton,
-  .registerButton {
-    height: 48px;
-    font-size: 16px;
-  }
-}
-
-@media screen and (min-width: 1280px) {
-  .field {
-    margin-bottom: 24px;
-  }
-
-  .inputWrapper {
-    height: 48px;
-  }
-
-  .submitButton {
-    margin-top: 8px;
+  .secondaryLink {
+    max-width: 300px;
   }
 }

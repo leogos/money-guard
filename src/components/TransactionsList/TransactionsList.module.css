@@ -1,57 +1,86 @@
-.container {
-    width: 100%;
-    margin-top: 24px;
+.wrapper {
+  overflow-y: auto;
+  max-height: 100%;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-
-    margin-bottom: 16px;
+.tableDesktop {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
 }
 
-.title {
-    margin: 0;
-
-    color: #111827;
-    font-size: 22px;
-    font-weight: 700;
+.tableDesktop th {
+  text-align: left;
+  padding: 12px 20px;
+  font-weight: 600;
+  opacity: 0.7;
 }
 
-.count {
-    margin: 0;
-
-    color: #6b7280;
-    font-size: 14px;
-    font-weight: 500;
+.tableDesktop td {
+  padding: 12px 20px;
 }
 
-.list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.tableDesktop tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tableDesktop thead {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.tableDesktop thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.tableDesktop thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.cardsMobile {
+  display: none;
 }
 
 .empty {
-    margin: 0;
-    padding: 24px;
-
-    color: #6b7280;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
+  color: white;
+  text-align: center;
+  padding: 40px;
+  opacity: 0.7;
 }
 
 @media (max-width: 767px) {
-    .header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 6px;
-    }
+  .wrapper {
+    overflow: visible;
+  }
 
-    .title {
-        font-size: 20px;
-    }
+  .tableDesktop {
+    display: none;
+  }
+
+  .cardsMobile {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .wrapper {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .tableDesktop {
+    overflow: hidden;
+    border-radius: 8px;
+    background: rgba(22, 13, 51, 0.16);
+  }
+
+  .tableDesktop thead {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .tableDesktop th,
+  .tableDesktop td {
+    padding: 14px 18px;
+  }
 }

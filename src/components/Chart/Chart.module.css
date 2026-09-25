@@ -1,86 +1,78 @@
 .wrapper {
-    width: 288px;
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
 }
 
-.chart {
-    position: relative;
-
-    width: 288px;
-    height: 288px;
-
-    flex: 0 0 288px;
-
-    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.35));
+.chartContainer {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.total {
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 104px;
-    height: 27px;
-
-    pointer-events: none;
+.centerLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
 }
 
-.total span {
-    color: #fbfbfb;
-
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    line-height: 100%;
-    font-weight: 600;
-
-    white-space: nowrap;
+.totalAmount {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
 }
 
-/* TABLET */
-
-@media screen and (max-width: 1100px) {
-    .wrapper {
-        width: 288px;
-    }
-
-    .chart {
-        width: 288px;
-        height: 288px;
-
-        flex-basis: 288px;
-    }
+.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 5px dashed rgba(255, 255, 255, 0.2);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.58);
+  text-align: center;
+  padding: 20px;
 }
 
-/* MOBILE */
+@media screen and (min-width: 768px) {
+  .chartContainer {
+    width: 300px;
+    height: 300px;
+  }
 
-@media screen and (max-width: 767px) {
-    .wrapper {
-        width: 100%;
-    }
+  .empty {
+    width: 300px;
+    height: 300px;
+  }
 
-    .chart {
-        width: min(288px, 82vw);
-        height: min(288px, 82vw);
+  .totalAmount {
+    font-size: 1.2rem;
+  }
+}
 
-        flex: 0 0 min(288px, 82vw);
-    }
+@media screen and (min-width: 1280px) {
+  .chartContainer {
+    width: 350px;
+    height: 350px;
+  }
 
-    .total {
-        width: auto;
-        height: auto;
-    }
+  .empty {
+    width: 350px;
+    height: 350px;
+  }
 
-    .total span {
-        font-size: 16px;
-    }
+  .totalAmount {
+    font-size: 1.5rem;
+  }
 }

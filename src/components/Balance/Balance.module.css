@@ -1,24 +1,51 @@
-.balance {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+.balanceCard {
+  background: rgba(82, 59, 126, 0.6);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  border-radius: 16px;
+  padding: 8px 40px 12px 40px;
+  box-shadow: 0px 4px 60px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
 }
 
 .label {
-    margin: 0 0 8px;
-    color: #6b7280;
-    font-size: 14px;
-    font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  margin: 0;
+  padding-bottom: 4px;
+  letter-spacing: 0.05em;
 }
 
 .amount {
-    margin: 0;
-    color: #111827;
-    font-size: 28px;
-    font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.currencySymbol {
+  font-weight: 400;
+}
+
+/* 📱 RESPONSIVE: MOBİL UYUMLULUK */
+@media (max-width: 767px) {
+  .balanceCard {
+    max-width: 100%;
+    padding: 12px 32px 20px;
+    border-radius: 8px;
+    background: rgba(82, 59, 126, 0.7);
+  }
+
+  .amount {
+    font-size: 30px;
+  }
 }

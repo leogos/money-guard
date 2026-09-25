@@ -1,162 +1,65 @@
-.wrapper {
-    width: 100%;
-    min-height: 100vh;
-    box-sizing: border-box;
-    padding: 25px 40px 60px 0;
-
-    color: #fbfbfb;
-
-    background:
-        radial-gradient(
-            circle at 72% 88%,
-            rgba(116, 22, 115, 0.72) 0%,
-            rgba(116, 22, 115, 0.35) 24%,
-            rgba(116, 22, 115, 0) 52%
-        ),
-        linear-gradient(
-            135deg,
-            #10101b 0%,
-            #11101e 36%,
-            #1b122c 62%,
-            #36133f 100%
-        );
+.statistics {
+  width: 100%;
+  padding: 20px;
+  color: white;
 }
 
-.statisticsLayout {
-    width: 715px;
-    max-width: 100%;
-}
-
-.statisticsHeader {
-    position: relative;
-    width: 100%;
-    height: 65px;
-    margin: 0;
+.title {
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 400;
+  color: white;
+  text-align: center;
+  margin: 0 0 2rem;
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.right {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .statistics {
+    padding: 0 26px;
+  }
+
+  .title {
+    text-align: left;
+    font-size: 30px;
+    margin-bottom: 18px;
+  }
+
+  .content {
     display: grid;
-    grid-template-columns: 288px 395px;
-    column-gap: 32px;
-
-    width: 715px;
-    max-width: 100%;
-
+    grid-template-columns: minmax(280px, 1fr) minmax(260px, 1fr);
     align-items: start;
+    gap: 24px;
+  }
+
+  .right {
+    gap: 18px;
+  }
 }
 
-.chartSection {
-    width: 288px;
+@media screen and (min-width: 1280px) {
+  .statistics {
+    padding: 20px;
+  }
 
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-}
+  .content {
+    gap: 40px;
+  }
 
-.messageSection {
-    width: 395px;
+  .right {
     min-width: 0;
-
-    margin-top: 70px;
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.emptyMessage {
-    margin: 0;
-
-    color: #fbfbfb;
-
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    line-height: 1.4;
-    font-weight: 400;
-
-    white-space: nowrap;
-}
-
-/* TABLET */
-
-@media screen and (max-width: 1100px) {
-    .wrapper {
-        padding: 25px 30px 50px;
-    }
-
-    .statisticsLayout {
-        width: 100%;
-        max-width: 715px;
-    }
-
-    .content {
-        grid-template-columns: 288px minmax(0, 1fr);
-        width: 100%;
-        column-gap: 25px;
-    }
-
-    .chartSection {
-        width: 288px;
-    }
-
-    .messageSection {
-        width: 100%;
-        margin-top: 70px;
-    }
-
-    .emptyMessage {
-        font-size: 16px;
-        white-space: normal;
-    }
-}
-
-/* MOBILE */
-
-@media screen and (max-width: 767px) {
-    .wrapper {
-        padding: 22px 16px 40px;
-        overflow-x: hidden;
-    }
-
-    .statisticsLayout {
-        width: 100%;
-    }
-
-    .statisticsHeader {
-        height: auto;
-        min-height: 65px;
-    }
-
-    .content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-
-        width: 100%;
-    }
-
-    .chartSection {
-        width: 100%;
-
-        display: flex;
-        justify-content: center;
-    }
-
-    .messageSection {
-        width: 100%;
-        margin-top: 0;
-
-        display: flex;
-        justify-content: center;
-        text-align: center;
-    }
-
-    .emptyMessage {
-        max-width: 100%;
-
-        font-size: 14px;
-        line-height: 1.4;
-        white-space: normal;
-    }
+  }
 }

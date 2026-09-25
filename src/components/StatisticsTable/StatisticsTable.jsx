@@ -1,102 +1,80 @@
-import styles from './StatisticsTable.module.css';
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import {
+  selectExpenseCategories,
+  selectExpenseTotal,
+  selectIncomeTotal,
+} from "../../redux/statistics/selectors";
+import css from "./StatisticsTable.module.css";
 
-import { selectStatistics } from '../../redux/statistics/statisticsSelectors';
-
-const CATEGORY_COLORS = [
-    '#FED057',
-    '#FFD8D0',
-    '#FD9498',
-    '#C5BAFF',
-    '#6E78E8',
-    '#4A56E2',
-    '#81E176',
-    '#24CE85',
-    '#00AD8E',
+const COLORS = [
+  "#FED057", "#FFD8D0", "#FD9498", "#C5BAFF",
+  "#6E78E8", "#4A56E2", "#81E1FF", "#24CCA7",
+  "#00AD84", "#FFB627", "#FF7F7F", "#F4AD4C",
 ];
 
-const StatisticsTable = () => {
-    const statistics = useSelector(selectStatistics);
+function getCategoryName(category) {
+  return category.name || category.categoryName || "Other";
+}
 
-    const categories = statistics?.categoriesSummary ?? [];
+function getCategoryTotal(category) {
+  const total = Number(category.total ?? category.amount ?? category.sum ?? 0);
 
-    const expenseCategories = categories.filter(
-        category => category.type === 'EXPENSE'
-    );
+  return Number.isFinite(total) ? Math.abs(total) : 0;
+}
 
-    const totalExpenses = expenseCategories.reduce(
-        (sum, category) =>
-            sum + Number(category.total || 0),
-        0
-    );
+export function StatisticsTable() {
+  const categories = useSelector(selectExpenseCategories);
+  const expenseTotal = useSelector(selectExpenseTotal);
+  const incomeTotal = useSelector(selectIncomeTotal);
 
-    return (
-        <div className={styles.wrapper}>
-            <div className={styles.header}>
-                <span>Category</span>
-                <span>Sum</span>
-            </div>
+  const expenseCategories = Array.isArray(categories)
+    ? categories.filter(
+        (category) =>
+          !category.type || String(category.type).toUpperCase() === "EXPENSE",
+      )
+    : [];
 
-            <div className={styles.list}>
-                {expenseCategories.map((category, index) => {
-                    const categoryColor =
-                        CATEGORY_COLORS[
-                        index % CATEGORY_COLORS.length
-                        ];
+  const income =
+    typeof incomeTotal === "number" ? incomeTotal : 0;
+  const expense =
+    typeof expenseTotal === "number" ? expenseTotal : 0;
 
-                    return (
-                        <div
-                            className={styles.item}
-                            key={category.name}
-                        >
-                            <div className={styles.category}>
-                                <span
-                                    className={styles.dot}
-                                    style={{
-                                        backgroundColor:
-                                            categoryColor,
-                                    }}
-                                />
+  return (
+    <div className={css.wrapper}>
+      <div className={css.header}>
+        <span>Category</span>
+        <span>Sum</span>
+      </div>
 
-                                <span>{category.name}</span>
-                            </div>
+      {expenseCategories.length === 0 ? (
+        <p className={css.empty}>No transactions for this period</p>
+      ) : (
+        <ul className={css.list}>
+          {expenseCategories.map((cat, i) => (
+            <li key={`${getCategoryName(cat)}-${i}`} className={css.item}>
+              <span
+                className={css.colorDot}
+                style={{ backgroundColor: COLORS[i % COLORS.length] }}
+              />
+              <span className={css.name}>{getCategoryName(cat)}</span>
+              <span className={css.sum}>
+                {getCategoryTotal(cat).toFixed(2)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
 
-                            <span
-                                className={styles.amount}
-                                style={{
-                                    color: categoryColor,
-                                }}
-                            >
-                                {Number(
-                                    category.total || 0
-                                ).toFixed(2)}
-                            </span>
-                        </div>
-                    );
-                })}
-            </div>
-
-            <div className={styles.summary}>
-                <div className={styles.summaryRow}>
-                    <span>Expenses</span>
-
-                    <span className={styles.expensesAmount}>
-                        {totalExpenses.toFixed(2)}
-                    </span>
-                </div>
-
-                <div className={styles.summaryRow}>
-                    <span>Income</span>
-
-                    <span className={styles.incomeAmount}>
-                        {Number(
-                            statistics?.incomeSummary || 0
-                        ).toFixed(2)}
-                    </span>
-                </div>
-            </div>
+      <div className={css.totals}>
+        <div className={css.totalRow}>
+          <span className={css.totalLabel}>Expenses:</span>
+          <span className={css.expenseValue}>{expense.toFixed(2)}</span>
         </div>
-    );
-};
-
-export default StatisticsTable;
+        <div className={css.totalRow}>
+          <span className={css.totalLabel}>Income:</span>
+          <span className={css.incomeValue}>{income.toFixed(2)}</span>
+        </div>
+      </div>
+    </div>
+  );
+}

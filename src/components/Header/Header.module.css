@@ -1,45 +1,186 @@
 .header {
-    width: 100%;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(270deg, #2e1756 0%, #160d33 100%);
+  box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  padding: 16px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
 }
 
 .logo {
-    font-size: 22px;
-    font-weight: 700;
-    color: #1f2937;
+  width: 30px;
+  height: 30px;
 }
 
-.userInfo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.logoIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffc727 0%, #734aef 100%);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.logoText {
+  font-family: "Poppins", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .username {
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.logoutButton {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 8px;
-    background-color: #2563eb;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
-.logoutButton:hover {
-    background-color: #1d4ed8;
+.logoutBtn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: opacity 0.3s ease;
+}
+
+.logoutBtn:hover {
+  opacity: 0.8;
+}
+
+.exitIcon {
+  width: 18px;
+  height: 18px;
+  color: #ffffff99;
+}
+
+.exitText {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 12px 0 10px;
+    background: linear-gradient(270deg, #2e1756 0%, #160d33 100%);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+  }
+
+  .container {
+    max-width: 375px;
+    padding: 0 20px;
+  }
+
+  .logoText {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .logoWrap {
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  .logoMark {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    font-size: 7px;
+  }
+
+  .logoIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .exitText {
+    display: none;
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  .username {
+    font-size: 18px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .logoutBtn {
+    padding: 0;
+  }
+
+  .exitIcon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .container {
+    max-width: 768px;
+    padding: 0 32px;
+  }
+
+  .logoWrap {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .logoIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .logoText {
+    font-size: 16px;
+    font-weight: 400;
+  }
 }

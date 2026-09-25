@@ -1,229 +1,292 @@
-import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { useDispatch } from 'react-redux';
-import { addTransaction } from '../../redux/transactions/transactionsOperations';
-import styles from './AddTransactionForm.module.css';
+import { useEffect, useRef, useState } from "react";
 
-const schema = yup.object().shape({
-  type: yup.string().required(),
-  sum: yup
+import { useDispatch, useSelector } from "react-redux";
+
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import DatePicker from "react-datepicker";
+
+import * as yup from "yup";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+import { FiCalendar } from "react-icons/fi";
+
+import css from "./AddTransactionForm.module.css";
+
+import {
+  selectCategories,
+  selectCategoriesLoading,
+} from "../../redux/categories/selectors";
+import { fetchCategories } from "../../redux/categories/operations";
+
+import { addTransaction } from "../../redux/transactions/operations";
+
+const schema = yup.object({
+  amount: yup
     .number()
-    .typeError('Lütfen geçerli bir tutar girin')
-    .positive('Tutar sıfırdan büyük olmalıdır')
-    .required('Tutar zorunludur'),
-  date: yup.date().required('Tarih zorunludur'),
-  comment: yup.string(),
-  category: yup.string().when('type', {
-    is: 'expense',
-    then: () => yup.string().required('Gider için kategori seçmelisiniz'),
-    otherwise: () => yup.string().notRequired(),
+    .typeError("Amount must be a number")
+    .notOneOf([0], "Amount must not be 0")
+    .required("Amount is required"),
+
+  comment: yup.string().required("Comment is required"),
+
+  date: yup
+    .date()
+    .nullable()
+    .typeError("Please select a valid date")
+    .required("Date is required"),
+
+  category: yup.string().when("$type", {
+    is: "expense",
+    then: (schema) => schema.required("Category is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
 });
 
-export const AddTransactionForm = ({ onClose }) => {
-  const dispatch = useDispatch();
+function formatTransactionDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+export function AddTransactionForm({ onClose }) {
+  const [type, setType] = useState("expense");
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const categoryDropdownRef = useRef(null);
+
+  const dispatch = useDispatch();
+
+  const categories = useSelector(selectCategories);
+  const expenseCategories = categories.filter(
+    (category) => category.type?.toUpperCase() === "EXPENSE",
+  );
+
+  const isLoadingCategories = useSelector(selectCategoriesLoading);
+  const incomeCategoryId = categories.find(
+    (category) => category.type?.toUpperCase() === "INCOME",
+  )?.id;
+
+  useEffect(() => {
+    if (!categories.length) {
+      dispatch(fetchCategories());
+    }
+  }, [categories.length, dispatch]);
+
+  useEffect(() => {
+    if (!isCategoryOpen) return undefined;
+
+    function handleOutsideClick(event) {
+      if (!categoryDropdownRef.current?.contains(event.target)) {
+        setIsCategoryOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsideClick);
+    };
+  }, [isCategoryOpen]);
 
   const {
     register,
-    handleSubmit,
     control,
-    watch,
+    handleSubmit,
+    reset,
     setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      type: 'expense',
-      date: new Date(),
-      sum: '',
-      comment: '',
-      category: '',
-    },
+    context: { type },
   });
+  const selectedCategoryId = useWatch({
+    control,
+    name: "category",
+    defaultValue: "",
+  });
+  const selectedCategoryName =
+    expenseCategories.find((category) => category.id === selectedCategoryId)
+      ?.name || "Select category";
 
-  const transactionType = watch('type');
-  const selectedCategory = watch('category');
-
-  const categories = [
-    'Main expenses',
-    'Products',
-    'Car',
-    'Self care',
-    'Child care',
-    'Household products',
-    'Education',
-    'Leisure',
-  ];
-
-  const handleCategorySelect = category => {
-    setValue('category', category, { shouldValidate: true });
-    setIsCategoryOpen(false);
-  };
-
-  const onSubmit = data => {
-    const formattedData = {
-      ...data,
-      date: data.date.toISOString(),
+  async function onSubmit(data) {
+    const categoryId = type === "expense" ? data.category : incomeCategoryId;
+    const amount = Math.abs(Number(data.amount));
+    const finalData = {
+      amount: type === "expense" ? -amount : amount,
+      transactionDate: formatTransactionDate(data.date),
+      type: type === "income" ? "INCOME" : "EXPENSE",
+      comment: data.comment,
+      categoryId,
     };
 
-    dispatch(addTransaction(formattedData))
-      .unwrap()
-      .then(() => {
-        if (onClose) onClose();
-      })
-      .catch(err => console.error('Ekleme Hatası:', err));
-  };
+    try {
+      await dispatch(addTransaction(finalData)).unwrap();
+
+      reset();
+
+      setType("expense");
+
+      onClose?.();
+    } catch {
+      // Global error toast is handled in App; keep the modal open for retry.
+    }
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <div className={styles.toggleContainer}>
-        <span
-          className={transactionType === 'income' ? styles.activeIncome : ''}
-        >
+    <form className={css.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+      <h2 className={css.title}>Add transaction</h2>
+
+      <div className={css.switchWrapper}>
+        <span className={type === "income" ? css.activeIncome : css.incomeText}>
           Income
         </span>
-        <label className={styles.switch}>
-          <input
-            type="checkbox"
-            {...register('type')}
-            value={transactionType === 'expense' ? 'income' : 'expense'}
-          />
-          <span className={styles.slider}></span>
-        </label>
+
+        <button
+          type="button"
+          className={css.switch}
+          onClick={() => {
+            if (type === "income") {
+              setType("expense");
+            } else {
+              setType("income");
+              setValue("category", "");
+              setIsCategoryOpen(false);
+            }
+          }}>
+          <div
+            className={type === "income" ? css.thumbIncome : css.thumbExpense}>
+            <span className={css.switchSymbol}>
+              {type === "income" ? "+" : "-"}
+            </span>
+          </div>
+        </button>
+
         <span
-          className={transactionType === 'expense' ? styles.activeExpense : ''}
-        >
+          className={type === "expense" ? css.activeExpense : css.expenseText}>
           Expense
         </span>
       </div>
 
-      {transactionType === 'expense' && (
-        <div className={styles.inputGroup}>
-          <div className={styles.customSelectContainer}>
-            <div
-              className={`${styles.input} ${styles.customSelect}`}
-              onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-            >
-              <span
-                style={{
-                  color: selectedCategory
-                    ? 'white'
-                    : 'rgba(255, 255, 255, 0.6)',
-                }}
+      {type === "expense" && (
+        <div className={css.field} ref={categoryDropdownRef}>
+          {isLoadingCategories ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <input type="hidden" {...register("category")} />
+              <button
+                className={css.categoryTrigger}
+                type="button"
+                onClick={() => setIsCategoryOpen((isOpen) => !isOpen)}
               >
-                {selectedCategory || 'Select a category'}
-              </span>
-              <svg
-                className={styles.arrow}
-                width="18"
-                height="9"
-                viewBox="0 0 18 9"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  transform: isCategoryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.3s ease',
-                  marginRight: '10px',
-                }}
-              >
-                <path
-                  d="M1 1L9 8L17 1"
-                  stroke="rgba(255,255,255,0.6)"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+                <span>{selectedCategoryName}</span>
+                <span
+                  className={`${css.categoryArrow} ${
+                    isCategoryOpen ? css.categoryArrowOpen : ""
+                  }`}
+                  aria-hidden="true"
+                ></span>
+              </button>
 
-            {isCategoryOpen && (
-              <ul className={styles.dropdownList}>
-                {categories.map(cat => (
-                  <li
-                    key={cat}
-                    onClick={() => handleCategorySelect(cat)}
-                    className={styles.dropdownItem}
-                  >
-                    {cat}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+              {isCategoryOpen && (
+                <ul className={css.categoryDropdown}>
+                  {expenseCategories.map((category) => (
+                    <li key={category.id}>
+                      <button
+                        className={`${css.categoryOption} ${
+                          category.id === selectedCategoryId
+                            ? css.categoryOptionActive
+                            : ""
+                        }`}
+                        type="button"
+                        onClick={() => {
+                          setValue("category", category.id, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+                          setIsCategoryOpen(false);
+                        }}
+                      >
+                        {category.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          )}
+
           {errors.category && (
-            <span className={styles.error}>{errors.category.message}</span>
+            <p className={css.error}>{errors.category.message}</p>
           )}
         </div>
       )}
 
-      <div className={styles.row}>
-        <div className={styles.inputGroup}>
+      <div className={css.row}>
+        <div className={css.field}>
           <input
+            className={css.input}
             type="number"
-            step="0.01"
             placeholder="0.00"
-            {...register('sum')}
-            className={styles.input}
+            {...register("amount")}
           />
-          {errors.sum && (
-            <span className={styles.error}>{errors.sum.message}</span>
+
+          {errors.amount && (
+            <p className={css.error}>{errors.amount.message}</p>
           )}
         </div>
 
-        <div className={styles.inputGroup}>
-          <div className={styles.dateInputWrapper}>
+        <div className={css.field}>
+          <div className={css.dateBox}>
             <Controller
               control={control}
               name="date"
               render={({ field }) => (
                 <DatePicker
+                  className={css.input}
+                  wrapperClassName={css.datePicker}
+                  placeholderText="Select date"
                   selected={field.value}
-                  onChange={date => field.onChange(date)}
+                  onChange={(date) => field.onChange(date)}
                   dateFormat="dd.MM.yyyy"
-                  className={styles.input}
+                  maxDate={new Date()}
                 />
               )}
             />
-            {/* Figma'daki Orijinal İçi Dolu Takvim İkonu Buraya Gömüldü */}
-            <svg
-              className={styles.calendarIcon}
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="#734AEF"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M9 11H7V13H9V11ZM13 11H11V13H13V11ZM17 11H15V13H17V11ZM19 4H18V2H16V4H8V2H6V4H5C3.89 4 3.01 4.9 3.01 6L3 20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V9H19V20Z" />
-            </svg>
+
+            <FiCalendar className={css.calendarIcon} />
           </div>
-          {errors.date && (
-            <span className={styles.error}>{errors.date.message}</span>
-          )}
+
+          {errors.date && <p className={css.error}>{errors.date.message}</p>}
         </div>
       </div>
 
-      <div className={styles.inputGroup}>
+      <div className={css.field}>
         <input
+          className={css.input}
           type="text"
           placeholder="Comment"
-          {...register('comment')}
-          className={styles.input}
+          {...register("comment")}
         />
+
+        {errors.comment && (
+          <p className={css.error}>{errors.comment.message}</p>
+        )}
       </div>
 
-      <div className={styles.buttonContainer}>
-        <button type="submit" className={styles.submitBtn}>
-          ADD
+      <div className={css.buttonBox}>
+        <button className={css.addBtn} type="submit">
+          Add
         </button>
-        <button type="button" className={styles.cancelBtn} onClick={onClose}>
-          CANCEL
+
+        <button className={css.cancelBtn} type="button" onClick={onClose}>
+          Cancel
         </button>
       </div>
     </form>
   );
-};
+}

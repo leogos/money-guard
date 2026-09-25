@@ -1,116 +1,58 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import {
-  selectTransactions,
-  selectIsLoading,
-  selectError,
-} from '../../redux/transactions/transactionsSelectors';
-import { TransactionsItem } from '../TransactionsItem/TransactionsItem';
+import { TransactionItem } from "../TransactionItem/TransactionItem";
+import styles from "./TransactionsList.module.css";
 
-export const TransactionsList = () => {
-  const transactions = useSelector(selectTransactions);
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
-
-  if (isLoading) {
-    return <h3 style={{ color: 'white', textAlign: 'center' }}>Loading...</h3>;
+function getCategoryName(categories, categoryId) {
+  if (!categoryId) {
+    return "Income";
   }
 
   return (
-    <div
-      style={{
-        marginTop: '30px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-      }}
-    >
-      {/* Eğer backend'e ulaşılamazsa veya hata dönerse ekranda göster */}
-      {error && (
-        <div
-          style={{
-            backgroundColor: 'rgba(255, 101, 150, 0.1)',
-            border: '1px solid #ff6596',
-            padding: '10px',
-            borderRadius: '8px',
-            color: '#ff6596',
-            textAlign: 'center',
-            marginBottom: '15px',
-          }}
-        >
-          Server Error: {error}
-        </div>
-      )}
+    categories.find((category) => category.id === categoryId)?.name || "Other"
+  );
+}
 
-      {/* İşlem yoksa uyarı mesajı (Sadece hata yoksa ve liste boşsa göster) */}
-      {!error && (!transactions || transactions.length === 0) && (
-        <p
-          style={{
-            textAlign: 'center',
-            color: 'gray',
-            marginTop: '40px',
-            fontSize: '18px',
-          }}
-        >
-          No transactions found. Click the + button to add one!
-        </p>
-      )}
+export function TransactionsList({ transactions, categories = [], isLoading }) {
+  if (isLoading) return <p className={styles.empty}>Loading...</p>;
 
-      {/* İşlemler varsa listele */}
-      {transactions &&
-        transactions.map(transaction => (
-          <TransactionsItem
-            key={transaction.id || transaction._id}
+  if (!transactions || transactions.length === 0) {
+    return <p className={styles.empty}>You have no transactions yet</p>;
+  }
+
+  return (
+    <div className={styles.wrapper}>
+      <table className={styles.tableDesktop}>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Comment</th>
+            <th>Sum</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map((transaction) => (
+            <TransactionItem
+              key={transaction.id}
+              transaction={transaction}
+              categoryName={getCategoryName(categories, transaction.categoryId)}
+              variant="row"
+            />
+          ))}
+        </tbody>
+      </table>
+
+      <div className={styles.cardsMobile}>
+        {transactions.map((transaction) => (
+          <TransactionItem
+            key={transaction.id}
             transaction={transaction}
+            categoryName={getCategoryName(categories, transaction.categoryId)}
+            variant="card"
           />
         ))}
+      </div>
     </div>
   );
-};
-import TransactionsItem from '../TransactionsItem/TransactionsItem';
-import css from './TransactionsList.module.css';
-
-const TransactionsList = ({
-  transactions = [],
-  onEdit,
-  onDelete,
-}) => {
-  if (!transactions || transactions.length === 0) {
-    return (
-      <section className={css.container}>
-        <div className={css.header}>
-          <h2 className={css.title}>Transactions</h2>
-          <p className={css.count}>0 transactions</p>
-        </div>
-
-        <p className={css.empty}>No transactions yet.</p>
-      </section>
-    );
-  }
-
-  return (
-    <section className={css.container}>
-      <div className={css.header}>
-        <h2 className={css.title}>Transactions</h2>
-
-        <p className={css.count}>
-          {transactions.length}{' '}
-          {transactions.length === 1 ? 'transaction' : 'transactions'}
-        </p>
-      </div>
-
-      <div className={css.list}>
-        {transactions.map(transaction => (
-          <TransactionsItem
-            key={transaction._id || transaction.id}
-            transaction={transaction}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
-    </section>
-  );
-};
-
-export default TransactionsList;
+}

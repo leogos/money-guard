@@ -1,162 +1,144 @@
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import * as Yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { FaLock, FaRegEnvelope } from "react-icons/fa";
+import * as yup from "yup";
+import { loginUser } from "../../redux/auth/operations";
+import { selectIsLoading } from "../../redux/global/selectors";
+import styles from "./LoginForm.module.css";
 
-import { login } from '../../redux/auth/authOperations';
-import { selectIsLoading } from '../../redux/auth/authSelectors';
-
-import styles from './LoginForm.module.css';
-
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Please enter a valid email address')
-    .required('Email is required'),
-
-  password: Yup.string()
-    .min(6, 'Password must contain at least 6 characters')
-    .max(12, 'Password must contain no more than 12 characters')
-    .required('Password is required'),
+const loginSchema = yup.object({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Please enter a valid email address"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .max(12, "Password must be at most 12 characters"),
 });
 
-const EmailIcon = () => (
-  <svg
-    className={styles.icon}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path
-      d="M3 6.75C3 5.784 3.784 5 4.75 5H19.25C20.216 5 21 5.784 21 6.75V17.25C21 18.216 20.216 19 19.25 19H4.75C3.784 19 3 18.216 3 17.25V6.75Z"
-      stroke="currentColor"
-      strokeWidth="2"
-    />
-    <path
-      d="M4 7L12 13L20 7"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const PasswordIcon = () => (
-  <svg
-    className={styles.icon}
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <rect
-      x="5"
-      y="10"
-      width="14"
-      height="10"
-      rx="2"
-      stroke="currentColor"
-      strokeWidth="2"
-    />
-    <path
-      d="M8 10V7.5C8 5.567 9.567 4 11.5 4H12.5C14.433 4 16 5.567 16 7.5V10"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-    <circle cx="12" cy="15" r="1.5" fill="currentColor" />
-  </svg>
-);
-
-const LoginForm = () => {
+export function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector(selectIsLoading);
 
   const {
-    register: registerField,
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
-    mode: 'onTouched',
+    resolver: yupResolver(loginSchema),
+    mode: "onSubmit",
   });
 
-  const onSubmit = async credentials => {
+  const onSubmit = async (data) => {
     try {
-      await dispatch(login(credentials)).unwrap();
-      navigate('/dashboard');
-    } catch (error) {
-      toast.error(error || 'Login failed');
+      await dispatch(loginUser(data)).unwrap();
+      navigate("/dashboard", { replace: true });
+    } catch {
+      // The global App toaster and the auth error area handle backend feedback.
     }
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="login-email">
-          Email
-        </label>
-
-        <div className={styles.inputWrapper}>
-          <EmailIcon />
-
-          <input
-            className={styles.input}
-            id="login-email"
-            type="email"
-            placeholder="E-mail"
-            autoComplete="email"
-            {...registerField('email')}
-          />
+    <main className={styles.page}>
+      <section className={styles.card} aria-labelledby="login-title">
+        <div className={styles.logoArea}>
+          <svg
+            className={styles.logoIcon}
+            width="36"
+            height="36"
+            viewBox="0 0 36 36"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M24.6579 4.94514C22.1122 4.30829 19.5664 3.03458 17.6571 1.12402C15.7478 3.03458 13.202 4.30829 10.6562 4.94514C11.2927 10.6768 13.202 14.4979 17.6571 17.6822C22.1122 14.4979 24.6579 10.6768 24.6579 4.94514Z"
+              fill="#FFC727"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M22.1116 28.6578L4.29126 7.6416V17.8313L18.2929 33.7526L22.1116 28.6578Z"
+              fill="#FBFBFB"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M24.0212 26.7476L31.6585 17.8316V8.27881L19.5662 22.2896L24.0212 26.7476Z"
+              fill="#FBFBFB"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M24.6577 29.9319V35.6636L31.6586 27.3845V21.6528L24.6577 29.9319Z"
+              fill="#FBFBFB"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M11.2921 29.9319L4.29126 21.6528V27.3845L11.2921 35.6636V29.9319Z"
+              fill="#FBFBFB"
+            />
+          </svg>
+          <h1 id="login-title" className={styles.logoText}>
+            Money Guard
+          </h1>
         </div>
 
-        {errors.email && <p className={styles.error}>{errors.email.message}</p>}
-      </div>
+        <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+          <label className={styles.field}>
+            <span className={styles.icon} aria-hidden="true">
+              <FaRegEnvelope />
+            </span>
+            <input
+              className={styles.input}
+              type="email"
+              placeholder="E-mail"
+              autoComplete="email"
+              {...register("email")}
+            />
+          </label>
+          {errors.email && (
+            <p className={styles.fieldError}>{errors.email.message}</p>
+          )}
 
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="login-password">
-          Password
-        </label>
+          <label className={styles.field}>
+            <span className={styles.icon} aria-hidden="true">
+              <FaLock />
+            </span>
+            <input
+              className={styles.input}
+              type="password"
+              placeholder="Password"
+              autoComplete="current-password"
+              {...register("password")}
+            />
+          </label>
+          {errors.password && (
+            <p className={styles.fieldError}>{errors.password.message}</p>
+          )}
 
-        <div className={styles.inputWrapper}>
-          <PasswordIcon />
-
-          <input
-            className={styles.input}
-            id="login-password"
-            type="password"
-            placeholder="Password"
-            autoComplete="current-password"
-            {...registerField('password')}
-          />
-        </div>
-
-        {errors.password && (
-          <p className={styles.error}>{errors.password.message}</p>
-        )}
-      </div>
-
-      <button
-        className={styles.submitButton}
-        type="submit"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Logging in...' : 'LOG IN'}
-      </button>
-
-      <Link className={styles.registerButton} to="/register">
-        REGISTER
-      </Link>
-    </form>
+          <div className={styles.actions}>
+            <button
+              className={styles.submitButton}
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "LOADING..." : "LOG IN"}
+            </button>
+            <Link className={styles.secondaryLink} to="/register">
+              REGISTER
+            </Link>
+          </div>
+        </form>
+      </section>
+    </main>
   );
-};
-
-export default LoginForm;
+}

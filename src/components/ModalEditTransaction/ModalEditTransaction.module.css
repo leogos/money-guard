@@ -1,0 +1,84 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(22, 13, 51, 0.42);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  z-index: 1000;
+}
+
+.modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 540px;
+
+  padding: 40px;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background: linear-gradient(
+    180deg,
+    rgba(83, 59, 143, 0.95) 0%,
+    rgba(80, 49, 156, 0.92) 100%
+  );
+
+  box-shadow: 0 4px 60px rgba(0, 0, 0, 0.3);
+}
+
+.closeBtn {
+  position: absolute;
+
+  top: 28px;
+  right: 28px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeBtn > svg {
+  width: 28px;
+  height: 28px;
+
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+@media screen and (max-width: 767px) {
+  .modal {
+    max-width: 320px;
+
+    padding: 20px;
+  }
+
+  .closeBtn {
+    top: 24px;
+    right: 24px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .modal {
+    max-width: 540px;
+
+    padding: 32px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .modal {
+    max-width: 600px;
+
+    padding: 40px;
+  }
+}

@@ -1,59 +1,34 @@
-import StatisticsDashboard from '../../components/StatisticsDashboard/StatisticsDashboard';
-import StatisticsTable from '../../components/StatisticsTable/StatisticsTable';
-import Chart from '../../components/Chart/Chart';
-import styles from './StatisticsTab.module.css';
-import { useSelector } from 'react-redux';
-
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSummary } from "../../redux/statistics/operations";
 import {
-    selectStatistics,
-    selectStatisticsError,
-    selectStatisticsLoading,
-} from '../../redux/statistics/statisticsSelectors';
+  selectSelectedMonth,
+  selectSelectedYear,
+} from "../../redux/statistics/selectors";
+import { Chart } from "../../components/Chart/Chart";
+import { StatisticsDashboard } from "../../components/StatisticsDashboard/StatisticsDashboard";
+import { StatisticsTable } from "../../components/StatisticsTable/StatisticsTable";
+import css from "./StatisticsTab.module.css";
 
-const StatisticsTab = () => {
-    const statistics = useSelector(selectStatistics);
-    const isLoading = useSelector(selectStatisticsLoading);
-    const error = useSelector(selectStatisticsError);
+export default function StatisticsTab() {
+  const dispatch = useDispatch();
+  const selectedMonth = useSelector(selectSelectedMonth);
+  const selectedYear = useSelector(selectSelectedYear);
 
-    const categories = statistics?.categoriesSummary ?? [];
+  useEffect(() => {
+    dispatch(fetchSummary({ month: selectedMonth, year: selectedYear }));
+  }, [dispatch, selectedMonth, selectedYear]);
 
-    const hasTransactions = categories.some(
-        category => Number(category.total || 0) > 0
-    );
-
-    return (
-        <div className={styles.wrapper}>
-            <div className={styles.statisticsLayout}>
-                <div className={styles.statisticsHeader}>
-                    <StatisticsDashboard />
-                </div>
-
-                <div className={styles.content}>
-                    <div className={styles.chartSection}>
-                        <Chart />
-                    </div>
-
-                    <div className={styles.messageSection}>
-                        {isLoading ? (
-                            <p className={styles.emptyMessage}>
-                                Loading statistics...
-                            </p>
-                        ) : error ? (
-                            <p className={styles.emptyMessage}>
-                                No transactions for this period.
-                            </p>
-                        ) : hasTransactions ? (
-                            <StatisticsTable />
-                        ) : (
-                            <p className={styles.emptyMessage}>
-                                No transactions for this period.
-                            </p>
-                        )}
-                    </div>
-                </div>
-            </div>
+  return (
+    <section className={css.statistics}>
+      <h2 className={css.title}>Statistics</h2>
+      <div className={css.content}>
+        <Chart />
+        <div className={css.right}>
+          <StatisticsDashboard />
+          <StatisticsTable />
         </div>
-    );
-};
-
-export default StatisticsTab;
+      </div>
+    </section>
+  );
+}

@@ -1,72 +1,142 @@
-.page {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f6fa;
+.dashboardContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 14% 10%, rgba(115, 74, 239, 0.5), transparent 26%),
+    linear-gradient(160deg, #160d33 0%, #28135d 45%, #55228b 100%);
 }
 
-.layout {
-    flex: 1;
-    display: flex;
-    min-width: 0;
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 20px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .sidebar {
-    width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.sidebarTop {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.currencyWrap {
+  width: 100%;
+}
+
+.hiddenOnCurrencyPage {
+  display: none;
+}
+
+.contentArea {
+  flex-grow: 1;
+  min-height: 400px;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(22, 13, 51, 0.22);
+}
+
+@media screen and (max-width: 767px) {
+  .mainWrapper {
+    max-width: 375px;
+    padding: 16px 20px 88px;
+    gap: 24px;
+  }
+
+  .sidebar,
+  .sidebarTop {
+    gap: 14px;
+  }
+
+  .currencyWrap {
+    display: none;
+  }
+
+  .contentArea {
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .currencyPage {
+    gap: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .mainWrapper {
+    flex-direction: row;
+    padding: 40px 32px;
+    gap: 32px;
+  }
+
+  .sidebar {
+    width: 320px;
     flex-shrink: 0;
-    padding: 32px 24px;
-    box-sizing: border-box;
-}
+  }
 
-.main {
-    flex: 1;
-    min-width: 0;
-    display: flex;
+  .currencyPage {
     flex-direction: column;
-}
+    max-width: 768px;
+    padding-right: 0;
+    padding-left: 0;
+  }
 
-.content {
-    flex: 1;
+  .currencyPage .sidebar {
     width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 32px 24px;
-    box-sizing: border-box;
+  }
+
+  .currencyPage .sidebarTop {
+    align-items: center;
+  }
 }
 
-.title {
-    margin: 0 0 24px;
-    color: #111827;
-    font-size: 32px;
-    font-weight: 700;
-}
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .mainWrapper {
+    flex-direction: column;
+    max-width: 768px;
+    padding: 24px 32px 64px;
+    gap: 20px;
+  }
 
-@media (max-width: 1023px) {
-    .content {
-        padding: 24px 20px;
-    }
+  .sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 1fr);
+    align-items: stretch;
+    width: 100%;
+    gap: 32px;
+  }
 
-    .title {
-        font-size: 28px;
-    }
-}
+  .sidebarTop {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    gap: 20px;
+  }
 
-@media (max-width: 767px) {
-    .layout {
-        flex-direction: column;
-    }
+  .currencyWrap {
+    display: block;
+  }
 
-    .sidebar {
-        width: 100%;
-        padding: 16px;
-    }
-
-    .content {
-        padding: 20px 16px;
-    }
-
-    .title {
-        margin-bottom: 20px;
-        font-size: 24px;
-    }
+  .contentArea {
+    width: 100%;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+  }
 }

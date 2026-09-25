@@ -1,129 +1,101 @@
-import styles from './Chart.module.css';
-import { useSelector } from 'react-redux';
-import { Doughnut } from 'react-chartjs-2';
-
+import { useSelector } from "react-redux";
+import { Doughnut } from "react-chartjs-2";
 import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-
-import { selectStatistics } from '../../redux/statistics/statisticsSelectors';
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import {
+  selectExpenseCategories,
+  selectExpenseTotal,
+} from "../../redux/statistics/selectors";
+import css from "./Chart.module.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const CATEGORY_COLORS = [
-    '#FED057',
-    '#FFD8D0',
-    '#FD9498',
-    '#C5BAFF',
-    '#6E78E8',
-    '#4A56E2',
-    '#81E176',
-    '#24CE85',
-    '#00AD8E',
+const COLORS = [
+  "#FED057", "#FFD8D0", "#FD9498", "#C5BAFF",
+  "#6E78E8", "#4A56E2", "#81E1FF", "#24CCA7",
+  "#00AD84", "#FFB627", "#FF7F7F", "#F4AD4C",
 ];
 
-const Chart = () => {
-    const statistics = useSelector(selectStatistics);
+function getCategoryName(category) {
+  return category.name || category.categoryName || "Other";
+}
 
-    const categories = statistics?.categoriesSummary ?? [];
+function getCategoryTotal(category) {
+  const total = Number(category.total ?? category.amount ?? category.sum ?? 0);
 
-    const expenseCategories = categories.filter(
-        category => category.type === 'EXPENSE'
-    );
+  return Number.isFinite(total) ? Math.abs(total) : 0;
+}
 
-    const totalExpenses = expenseCategories.reduce(
-        (sum, category) =>
-            sum + Number(category.total || 0),
-        0
-    );
+const options = {
+  cutout: "70%",
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      callbacks: {
+        label: (ctx) => {
+          const value = Number(ctx.parsed);
 
-    const hasTransactions = expenseCategories.some(
-        category => Number(category.total || 0) > 0
-    );
-
-    const categoryColors = expenseCategories.map(
-        (_, index) =>
-            CATEGORY_COLORS[
-            index % CATEGORY_COLORS.length
-            ]
-    );
-
-    const data = {
-        labels: hasTransactions
-            ? expenseCategories.map(
-                category => category.name
-            )
-            : ['Expenses'],
-
-        datasets: [
-            {
-                data: hasTransactions
-                    ? expenseCategories.map(
-                        category =>
-                            Number(category.total || 0)
-                    )
-                    : [1],
-
-                backgroundColor: hasTransactions
-                    ? categoryColors
-                    : ['rgba(255, 255, 255, 0.08)'],
-
-                borderWidth: 0,
-                hoverOffset: 0,
-            },
-        ],
-    };
-
-    const options = {
-        responsive: true,
-        maintainAspectRatio: false,
-
-        cutout: '68%',
-
-        animation: {
-            duration: 0,
+          return ` ${ctx.label}: ${Number.isFinite(value) ? value.toFixed(2) : "0.00"}`;
         },
-
-        plugins: {
-            legend: {
-                display: false,
-            },
-
-            tooltip: {
-                enabled: hasTransactions,
-
-                callbacks: {
-                    label: context => {
-                        const value = Number(
-                            context.raw || 0
-                        );
-
-                        return ` ${value.toFixed(2)}`;
-                    },
-                },
-            },
-        },
-    };
-
-    return (
-        <div className={styles.wrapper}>
-            <div className={styles.chart}>
-                <Doughnut
-                    data={data}
-                    options={options}
-                />
-
-                <div className={styles.total}>
-                    <span>
-                        $ {totalExpenses.toFixed(2)}
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
+      },
+    },
+  },
 };
 
-export default Chart;
+export function Chart() {
+  const categories = useSelector(selectExpenseCategories);
+  const expenseTotal = useSelector(selectExpenseTotal);
+
+  const expenseCategories = Array.isArray(categories)
+    ? categories.filter(
+        (category) =>
+          !category.type || String(category.type).toUpperCase() === "EXPENSE",
+      )
+    : [];
+  const chartCategories = expenseCategories.filter(
+    (category) => getCategoryTotal(category) > 0,
+  );
+
+  if (chartCategories.length === 0) {
+    return (
+      <div className={css.wrapper}>
+        <div className={css.empty}>
+          <p>No expense data for this period</p>
+        </div>
+      </div>
+    );
+  }
+
+  const data = {
+    labels: chartCategories.map((category) => getCategoryName(category)),
+    datasets: [
+      {
+        data: chartCategories.map((category) => getCategoryTotal(category)),
+        backgroundColor: chartCategories.map(
+          (_, index) => COLORS[index % COLORS.length],
+        ),
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const total = typeof expenseTotal === "number" ? expenseTotal : 0;
+
+  return (
+    <div className={css.wrapper}>
+      <div className={css.chartContainer}>
+        <Doughnut data={data} options={options} />
+        <div className={css.centerLabel}>
+          <span className={css.totalAmount}>
+            {"\u20b4 "}
+            {total.toFixed(2)}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}

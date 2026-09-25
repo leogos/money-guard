@@ -1,37 +1,53 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from "redux-persist";
+import { authReducer } from "./auth/slice";
+import { categoriesReducer } from "./categories/slice";
+import { currencyReducer } from "./currency/slice";
+import { financeReducer } from "./finance/slice";
+import { globalReducer } from "./global/slice";
+import { statisticsReducer } from "./statistics/slice";
+import { transactionsReducer } from "./transactions/slice";
 
-import authReducer from './auth/authSlice';
-
-const authPersistConfig = {
-  key: 'auth',
-  storage,
-  whitelist: ['user', 'token', 'isLoggedIn'],
+const storage = {
+  getItem: (key) => Promise.resolve(localStorage.getItem(key)),
+  setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
+  removeItem: (key) => Promise.resolve(localStorage.removeItem(key)),
 };
 
-const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["token"],
+};
+
+const rootReducer = combineReducers({
+  auth: persistReducer(authPersistConfig, authReducer),
+  transactions: transactionsReducer,
+  categories: categoriesReducer,
+  statistics: statisticsReducer,
+  currency: currencyReducer,
+  finance: financeReducer,
+  global: globalReducer,
+});
 
 export const store = configureStore({
-  reducer: {
-    auth: persistedAuthReducer,
-  },
-
-  middleware: getDefaultMiddleware =>
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+  devTools: import.meta.env.DEV,
 });
 
 export const persistor = persistStore(store);

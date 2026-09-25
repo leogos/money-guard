@@ -1,22 +1,142 @@
-.navigation {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 0;
 }
 
 .link {
-    color: #6b7280;
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-.link:hover {
-    color: #2563eb;
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.16);
+  transition: all 0.3s ease;
 }
 
-.active {
-    color: #2563eb;
+.icon {
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.72);
+  fill: rgba(255, 255, 255, 0.72);
+  transition: all 0.3s ease;
+}
+
+.activeLink {
+  font-weight: 700;
+}
+
+.activeLink .iconWrap {
+  background-color: #734aef;
+  box-shadow: 0 0 18px rgba(115, 74, 239, 0.75);
+}
+
+.activeLink .icon {
+  color: #ffffff;
+  fill: #ffffff;
+}
+
+.mobileCurrencyOnly {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .nav {
+    flex-direction: row;
+    justify-content: center;
+    gap: 38px;
+    padding: 2px 0 0;
+  }
+
+  .link {
+    gap: 0;
+    padding: 8px;
+    background: transparent;
+  }
+
+  .navText {
+    display: none;
+  }
+
+  .mobileCurrencyOnly {
+    display: flex;
+  }
+
+  .iconWrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.55);
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: #2f1b5f;
+    fill: #2f1b5f;
+  }
+
+  .activeLink .iconWrap {
+    background-color: #734aef;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 0;
+  }
+
+  .link {
+    gap: 16px;
+    padding: 4px 0;
+  }
+
+  .navText {
+    display: inline;
+    color: #ffffff;
+    font-size: 18px;
+  }
+
+  .mobileCurrencyOnly {
+    display: none;
+  }
+
+  .iconWrap {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .icon {
+    width: 13px;
+    height: 13px;
+    color: #2f1b5f;
+    fill: #2f1b5f;
+  }
+
+  .activeLink .iconWrap {
+    background-color: #734aef;
+  }
 }

@@ -1,38 +1,52 @@
-import React, { useEffect } from 'react';
-import { AddTransactionForm } from '../AddTransactionForm/AddTransactionForm';
+import { useEffect } from "react";
+import { AddTransactionForm } from "../AddTransactionForm/AddTransactionForm";
+import css from "./ModalAddTransaction.module.css";
+import { RxCross1 } from "react-icons/rx";
 
-import styles from './ModalAddTransaction.module.css';
-
-export const ModalAddTransaction = ({ isOpen, onClose }) => {
+const ModalAddTransaction = ({ onClose }) => {
   useEffect(() => {
-    const handleKeyDown = e => {
-      if (e.code === 'Escape') onClose();
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
 
-  const handleBackdropClick = e => {
-    if (e.currentTarget === e.target) {
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  function handleBackdropClick(event) {
+    if (event.target === event.currentTarget) {
       onClose();
     }
-  };
+  }
 
   return (
-    <div className={styles.backdrop} onClick={handleBackdropClick}>
-      <div className={styles.modal}>
-        {/* Sağ üstteki X kapatma butonu */}
-        <button className={styles.closeBtn} onClick={onClose}>
-          &times;
+    <div className={css.backdrop} onClick={handleBackdropClick}>
+      <div className={css.modal}>
+        <button
+          type="button"
+          className={css.closeBtn}
+          onClick={onClose}
+          aria-label="Close add transaction modal">
+          <RxCross1 />
         </button>
 
-        <h2 className={styles.title}>Add transaction</h2>
-
-        {/* Formu çağırıyoruz (Simetrik Cancel butonu artık bu formun içinde!) */}
         <AddTransactionForm onClose={onClose} />
       </div>
     </div>
   );
 };
+
+export default ModalAddTransaction;

@@ -1,26 +1,24 @@
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../redux/auth/authSelectors';
-import css from './Balance.module.css';
+import { useSelector } from "react-redux";
+import { selectTotalBalance } from "../../redux/finance/selectors";
+import styles from "./Balance.module.css";
 
 const Balance = () => {
-  const user = useSelector(selectUser);
+  const totalBalance = useSelector(selectTotalBalance);
 
-  const balance = Number(user?.balance ?? 0);
+  const formattedBalance = new Intl.NumberFormat("uk-UA", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(totalBalance || 0);
 
   return (
-    <section className={css.balance}>
-      <p className={css.label}>Your balance</p>
-
-      <p className={css.amount}>
-        ₺{' '}
-        {balance.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
+    <div className={styles.balanceCard}>
+      <p className={styles.label}>YOUR BALANCE</p>
+      <p className={styles.amount}>
+        <span className={styles.currencySymbol}>{"\u20b4"}</span>{" "}
+        {formattedBalance}
       </p>
-    </section>
+    </div>
   );
 };
 
 export default Balance;
-
