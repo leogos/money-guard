@@ -1,4 +1,3 @@
-// Kisi 1 - RegistrationForm
 // Kullanilacak Redux operation: registerUser from redux/auth/operations.
 // Kullanilacak Redux selector: selectAuthError gerekirse redux/auth/selectors.
 // Form: react-hook-form + Yup; alanlar name, email, password, confirmPassword.
@@ -19,15 +18,18 @@ const registrationSchema = yup.object().shape({
     .string()
     .required('Username is required')
     .min(3, 'The username must be at least 3 characters long.'),
+
   email: yup
     .string()
     .required('Email is required')
     .email('Please enter a valid email address.'),
+
   password: yup
     .string()
     .required('Please enter a password.')
     .min(6, 'Your password must be at least 6 characters long.')
     .max(12, 'Your password can be a maximum of 12 characters.'),
+
   confirmPassword: yup
     .string()
     .required('Please confirm your password.')
@@ -47,27 +49,60 @@ export function RegistrationForm() {
     mode: 'onTouched',
   });
 
-  const confirmPassword = useWatch({
+  const name = useWatch({
     control,
-    name: 'confirmPassword',
+    name: 'name',
     defaultValue: '',
   });
+
+  const email = useWatch({
+    control,
+    name: 'email',
+    defaultValue: '',
+  });
+
   const password = useWatch({
     control,
     name: 'password',
     defaultValue: '',
   });
+
+  const confirmPassword = useWatch({
+    control,
+    name: 'confirmPassword',
+    defaultValue: '',
+  });
+
   const getProgressWidth = () => {
-    if (!confirmPassword) return '0%';
-    if (password === confirmPassword) return '100%';
-    if (password.startsWith(confirmPassword)) {
-      const percentage = (confirmPassword.length / password.length) * 100;
-      return `${percentage}%`;
+    let progress = 0;
+
+    if (name.trim() !== '') {
+      progress += 25;
     }
-    return '0%';
+
+    if (email.trim() !== '') {
+      progress += 25;
+    }
+
+    if (password.trim() !== '') {
+      progress += 25;
+    }
+
+    if (confirmPassword.trim() !== '' && confirmPassword === password) {
+      progress += 25;
+    }
+
+    return `${progress}%`;
   };
+
   const onFormSubmit = ({ name, email, password }) => {
-    dispatch(registerUser({ username: name, email, password }));
+    dispatch(
+      registerUser({
+        username: name,
+        email,
+        password,
+      })
+    );
   };
 
   return (
@@ -79,17 +114,20 @@ export function RegistrationForm() {
             alt="Money Guard Logo"
             className={css.logoImg}
           />
+
           <h1 className={css.logoTitle}>Money Guard</h1>
         </div>
 
         <div className={css.inputContainer}>
           <FaUser className={css.inputIcon} />
+
           <input
             className={css.inputField}
             placeholder="Name"
             type="text"
             {...register('name')}
           />
+
           {errors.name && (
             <p className={css.errorMessage}>{errors.name.message}</p>
           )}
@@ -97,12 +135,14 @@ export function RegistrationForm() {
 
         <div className={css.inputContainer}>
           <FaRegEnvelope className={css.inputIcon} />
+
           <input
             className={css.inputField}
             placeholder="Email"
             type="email"
             {...register('email')}
           />
+
           {errors.email && (
             <p className={css.errorMessage}>{errors.email.message}</p>
           )}
@@ -110,12 +150,14 @@ export function RegistrationForm() {
 
         <div className={css.inputContainer}>
           <FaLock className={css.inputIcon} />
+
           <input
             className={css.inputField}
             placeholder="Password"
             type="password"
             {...register('password')}
           />
+
           {errors.password && (
             <p className={css.errorMessage}>{errors.password.message}</p>
           )}
@@ -123,12 +165,14 @@ export function RegistrationForm() {
 
         <div className={css.inputContainer}>
           <FaLock className={css.inputIcon} />
+
           <input
             className={css.inputField}
             placeholder="Confirm Password"
             type="password"
             {...register('confirmPassword')}
           />
+
           {errors.confirmPassword && (
             <p className={css.errorMessage}>{errors.confirmPassword.message}</p>
           )}
@@ -145,6 +189,7 @@ export function RegistrationForm() {
           <button className={css.registerButton} type="submit">
             REGISTER
           </button>
+
           <Link className={css.loginLink} to="/login">
             LOG IN
           </Link>

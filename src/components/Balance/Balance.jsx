@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
-import { selectTotalBalance } from "../../redux/finance/selectors";
-import styles from "./Balance.module.css";
+import { useSelector } from 'react-redux';
+import { selectTotalBalance } from '../../redux/finance/selectors';
+import styles from './Balance.module.css';
 
 const Balance = () => {
   const totalBalance = useSelector(selectTotalBalance);
 
-  const formattedBalance = new Intl.NumberFormat("uk-UA", {
+  const formattedBalance = new Intl.NumberFormat('tr-TR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(totalBalance || 0);
@@ -14,7 +14,7 @@ const Balance = () => {
     <div className={styles.balanceCard}>
       <p className={styles.label}>YOUR BALANCE</p>
       <p className={styles.amount}>
-        <span className={styles.currencySymbol}>{"\u20b4"}</span>{" "}
+        <span className={styles.currencySymbol}>{'\u20BA'}</span>{' '}
         {formattedBalance}
       </p>
     </div>
