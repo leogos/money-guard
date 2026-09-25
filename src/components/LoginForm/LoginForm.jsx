@@ -1,23 +1,23 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { FaLock, FaRegEnvelope } from "react-icons/fa";
-import * as yup from "yup";
-import { loginUser } from "../../redux/auth/operations";
-import { selectIsLoading } from "../../redux/global/selectors";
-import styles from "./LoginForm.module.css";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaLock, FaRegEnvelope } from 'react-icons/fa';
+import * as yup from 'yup';
+import { loginUser } from '../../redux/auth/operations';
+import { selectIsLoading } from '../../redux/global/selectors';
+import styles from './LoginForm.module.css';
 
 const loginSchema = yup.object({
   email: yup
     .string()
-    .required("Email is required")
-    .email("Please enter a valid email address"),
+    .required('Email is required')
+    .email('Please enter a valid email address'),
   password: yup
     .string()
-    .required("Password is required")
-    .min(6, "Password must be at least 6 characters")
-    .max(12, "Password must be at most 12 characters"),
+    .required('Password is required')
+    .min(6, 'Password must be at least 6 characters')
+    .max(12, 'Password must be at most 12 characters'),
 });
 
 export function LoginForm() {
@@ -31,16 +31,14 @@ export function LoginForm() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(loginSchema),
-    mode: "onSubmit",
+    mode: 'onSubmit',
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     try {
       await dispatch(loginUser(data)).unwrap();
-      navigate("/dashboard", { replace: true });
-    } catch {
-      // The global App toaster and the auth error area handle backend feedback.
-    }
+      navigate('/dashboard', { replace: true });
+    } catch {}
   };
 
   return (
@@ -92,7 +90,11 @@ export function LoginForm() {
           </h1>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form
+          className={styles.form}
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+        >
           <label className={styles.field}>
             <span className={styles.icon} aria-hidden="true">
               <FaRegEnvelope />
@@ -102,7 +104,7 @@ export function LoginForm() {
               type="email"
               placeholder="E-mail"
               autoComplete="email"
-              {...register("email")}
+              {...register('email')}
             />
           </label>
           {errors.email && (
@@ -118,7 +120,7 @@ export function LoginForm() {
               type="password"
               placeholder="Password"
               autoComplete="current-password"
-              {...register("password")}
+              {...register('password')}
             />
           </label>
           {errors.password && (
@@ -131,7 +133,7 @@ export function LoginForm() {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? "LOADING..." : "LOG IN"}
+              {isLoading ? 'LOADING...' : 'LOG IN'}
             </button>
             <Link className={styles.secondaryLink} to="/register">
               REGISTER
