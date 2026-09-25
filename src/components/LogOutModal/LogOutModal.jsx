@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../redux/auth/operations';
-import styles from './LogoutModal.module.css';
+import styles from './LogOutModal.module.css';
 
 const LogoutModal = ({ onClose }) => {
   const dispatch = useDispatch();
