@@ -2,11 +2,9 @@
   min-height: 100vh;
   background-color: #201034;
   background-image:
-    radial-gradient(
-      600px 300px at 50% 6%,
+    radial-gradient(600px 300px at 50% 6%,
       rgba(155, 89, 255, 0.16),
-      rgba(155, 89, 255, 0) 30%
-    ),
+      rgba(155, 89, 255, 0) 30%),
     linear-gradient(180deg, #7a3fc5 0%, #5b2fb5 30%, #3a1c62 65%, #1f0930 100%),
     linear-gradient(120deg, rgba(255, 165, 0, 0.1), rgba(255, 165, 0, 0) 30%);
 
@@ -25,6 +23,7 @@
   max-width: 375px;
   box-sizing: border-box;
 }
+
 .logoContainer {
   display: flex;
   flex-direction: column;
@@ -33,11 +32,13 @@
   margin-bottom: 40px;
   width: 100%;
 }
+
 .logoImg {
   width: 36px;
   height: 36px;
   margin-bottom: 10px;
 }
+
 .logoTitle {
   color: #ffffff;
   font-size: 20px;
@@ -115,23 +116,23 @@
   background: linear-gradient(90deg, #ffa500, #ffd700);
   border-radius: 2px;
 }
+
 .buttonContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
 }
+
 .registerButton {
   border-radius: 20px;
   width: 280px;
   height: 50px;
   box-shadow: 1px 9px 15px 0 rgba(0, 0, 0, 0.2);
-  background: linear-gradient(
-    167deg,
-    #ffc727 0%,
-    #9e40ba 61.46%,
-    #7000ff 90.54%
-  );
+  background: linear-gradient(167deg,
+      #ffc727 0%,
+      #9e40ba 61.46%,
+      #7000ff 90.54%);
   color: white;
   border: none;
 }
@@ -148,7 +149,7 @@
   line-height: 50px;
 }
 
-/* // tablet ve üzeri için görsel ve form düzeni */
+
 @media (min-width: 768px) {
   .registerFormContainer {
     background-image:
@@ -178,6 +179,7 @@
   .inputContainer {
     width: 409px;
   }
+
   .passwordStrengthBar {
     width: 409px;
     height: 4px;
@@ -190,7 +192,7 @@
   }
 }
 
-/* masaüstü ve üzeri için görsel ve form düzeni */
+
 @media (min-width: 1280px) {
   .registerFormContainer {
     background-image:
