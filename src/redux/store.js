@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {
   FLUSH,
   PAUSE,
@@ -8,25 +8,25 @@ import {
   REHYDRATE,
   persistReducer,
   persistStore,
-} from "redux-persist";
-import { authReducer } from "./auth/slice";
-import { categoriesReducer } from "./categories/slice";
-import { currencyReducer } from "./currency/slice";
-import { financeReducer } from "./finance/slice";
-import { globalReducer } from "./global/slice";
-import { statisticsReducer } from "./statistics/slice";
-import { transactionsReducer } from "./transactions/slice";
+} from 'redux-persist';
+import { authReducer } from './auth/slice';
+import { categoriesReducer } from './categories/slice';
+import { currencyReducer } from './currency/slice';
+import { financeReducer } from './finance/slice';
+import { globalReducer } from './global/slice';
+import { statisticsReducer } from './statistics/slice';
+import { transactionsReducer } from './transactions/slice';
 
 const storage = {
-  getItem: (key) => Promise.resolve(localStorage.getItem(key)),
+  getItem: key => Promise.resolve(localStorage.getItem(key)),
   setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)),
-  removeItem: (key) => Promise.resolve(localStorage.removeItem(key)),
+  removeItem: key => Promise.resolve(localStorage.removeItem(key)),
 };
 
 const authPersistConfig = {
-  key: "auth",
+  key: 'auth',
   storage,
-  whitelist: ["token"],
+  whitelist: ['token'],
 };
 
 const rootReducer = combineReducers({
@@ -41,13 +41,13 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  devTools: import.meta.env.DEV,
+  devTools: true,
 });
 
 export const persistor = persistStore(store);
