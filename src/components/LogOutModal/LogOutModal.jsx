@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../redux/auth/operations';
+import { clearFinance } from '../../redux/finance/slice';
+import { clearTransactions } from '../../redux/transactions/slice';
 import styles from './LogOutModal.module.css';
 
 const LogoutModal = ({ onClose }) => {
@@ -19,8 +21,11 @@ const LogoutModal = ({ onClose }) => {
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
-    } catch {
+    } catch (error) {
+      console.error('Logout failed:', error);
     } finally {
+      dispatch(clearFinance());
+      dispatch(clearTransactions());
       localStorage.clear();
       navigate('/login', { replace: true });
       onClose();

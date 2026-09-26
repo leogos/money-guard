@@ -38,7 +38,9 @@ export function LoginForm() {
     try {
       await dispatch(loginUser(data)).unwrap();
       navigate('/dashboard', { replace: true });
-    } catch {}
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (

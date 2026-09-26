@@ -18,7 +18,9 @@ const normalizeTransactions = (payload) =>
 const financeSlice = createSlice({
   name: "finance",
   initialState,
-  reducers: {},
+  reducers: {
+    clearFinance: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTransactions.fulfilled, (state, action) => {
@@ -44,4 +46,5 @@ const financeSlice = createSlice({
   },
 });
 
+export const { clearFinance } = financeSlice.actions;
 export const financeReducer = financeSlice.reducer;

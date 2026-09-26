@@ -138,7 +138,9 @@ export function EditTransactionForm({ onClose, transaction }) {
       reset();
 
       onClose();
-    } catch {}
+    } catch (error) {
+      console.error('Failed to edit transaction:', error);
+    }
   }
 
   return (

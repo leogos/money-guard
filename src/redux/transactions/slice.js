@@ -33,6 +33,9 @@ const calculateBalance = (transactions) =>
 const transactionsSlice = createSlice({
   name: "transactions",
   initialState,
+  reducers: {
+    clearTransactions: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTransactions.pending, (state) => {
@@ -75,4 +78,5 @@ const transactionsSlice = createSlice({
 });
 
 export { calculateBalance };
+export const { clearTransactions } = transactionsSlice.actions;
 export const transactionsReducer = transactionsSlice.reducer;

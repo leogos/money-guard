@@ -131,7 +131,9 @@ export function AddTransactionForm({ onClose }) {
       setType('expense');
 
       onClose?.();
-    } catch {}
+    } catch (error) {
+      console.error('Failed to add transaction:', error);
+    }
   }
 
   return (
